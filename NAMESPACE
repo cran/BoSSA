@@ -1,0 +1,10 @@
+
+
+import(ape, SoDA)
+
+export(
+       "InfoGenBank",
+       "FastaSorter",
+       "grpPhylogeo",
+       "read.PDB"
+       ) 
