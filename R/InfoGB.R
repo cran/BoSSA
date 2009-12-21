@@ -1,88 +1,38 @@
 `InfoGB` <-
 function(X,tsleep=3)
 {
-	Organism <- ""
-	DateSub <- ""
-	DateEch <- ""
-	Host <- ""
-	Source <- ""
-	Location <- ""
-	GPS <- ""
-	Authors <- ""
-	Titre <- ""
-	Journal <- ""
-	pubmedURL <- ""
-	
 	GBID <- X
-	GBFile <- scan(paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=",GBID,"&rettype=gb",sep=""),what="",sep="\n",quiet=TRUE)
+	GBFile <- scan(paste("http://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&id=",GBID,"&rettype=gbc",sep=""),what="",sep="\n",quiet=TRUE)
+	GB <- xml(c("<root>",GBFile[3:length(GBFile)],"</root>"))
 	
-	if (length(grep("Submitted",GBFile))>0)
+	DateSub <- GB['INSDSet/INSDSeq/~^INSDSeq_create/#']
+	Organism <- GB['INSDSet/INSDSeq/INSDSeq_organism/#']
+	Taxo <- GB['INSDSet/INSDSeq/INSDSeq_taxonomy/#']
+	nbauthor <- length(GB['INSDSet/INSDSeq/INSDSeq_references/INSDReference/INSDReference_authors'][[1]])-2
+	authors <- NULL
+	for (i in 1:nbauthor)
 	{
-		Organism <- strsplit(GBFile[grep("ORGANISM",GBFile)],"ORGANISM",fixed=TRUE)[[1]][2]
+	authors <- c(authors,GB[paste('INSDSet/INSDSeq/INSDSeq_references/INSDReference/INSDReference_authors/INSDAuthor[',i,']/#',sep="")][[1]])
 	}
+	authors <- paste(authors,collapse=" ; ")
+	Titre <- GB['INSDSet/INSDSeq/INSDSeq_references/INSDReference/INSDReference_title/#'][[1]]
+	Journal <- GB['INSDSet/INSDSeq/INSDSeq_references/INSDReference/INSDReference_journal/#'][[1]]
+	pubmed <- GB['INSDSet/INSDSeq/INSDSeq_references/INSDReference/INSDReference_pubmed/#'][[1]]
+	pubmedURL <- ""
+	if(length(pubmed)>0) pubmedURL <- paste("http://www.ncbi.nlm.nih.gov/pubmed/",pubmed,sep="")
+	isolate <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="isolate"]
+	host <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="host"]
+	Location <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="country"]
+	DateEch <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="collection_date"]
+	GPS <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="lat_lon"]
+	source <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="isolation_source"]
 
-	#date de soumission	
-	if (length(grep("Submitted",GBFile))>0)
-	{	
-		DateSub2 <- strsplit(GBFile[grep("Submitted",GBFile)],"(",fixed=TRUE)[[1]]
-		DateSub <- strsplit(DateSub2[2],")",fixed=TRUE)[[1]][1]
-	}
-	
-	#date d'echantillonage
-	if (length(grep("collection_date",GBFile))>0) DateEch <- strsplit(GBFile[grep("collection_date",GBFile)],"collection_date=")[[1]][2]
-	
-	#localisation
-	if (length(grep("/country=",GBFile))>0)
-	{	
-		Location <- strsplit(GBFile[grep("/country=",GBFile)],"country=",fixed=TRUE)[[1]][2]
-	}
-	
-	#coordonn�e GPS
-	if (length(grep("lat_lon",GBFile))>0) GPS <- strsplit(GBFile[grep("lat_lon",GBFile)],"lat_lon=")[[1]][2]
-
-	#auteur and title
-	debut <- grep("AUTHORS",GBFile)[1]
-	milieu <- grep("TITLE",GBFile)[1]
-	fin <- grep("JOURNAL",GBFile)[1]
-	
-	Authors <- paste(unlist(strsplit(GBFile[debut:(milieu-1)],"AUTHORS"))[-1],collapse="")
-	Authors <- gsub(",","",Authors)
-	Authors <- gsub(" ","",Authors)
-	
-	Titre <- paste(unlist(strsplit(GBFile[milieu:(fin-1)],"TITLE"))[-1],collapse="")
-	Titre <- gsub(",","",Titre)
-	
-	Journal <- strsplit(GBFile[fin],"JOURNAL")[[1]][2]
-	Journal <- gsub(",",";",Journal)
-	
-	#date d'echantillonage
-	if (length(grep("PUBMED",GBFile))>0)
-	{
-		Pubmed <- strsplit(GBFile[grep("PUBMED",GBFile)],"PUBMED")[[1]][2]
-		Pubmed <- as.numeric(as.character(Pubmed))
-		pubmedURL <- paste("http://www.ncbi.nlm.nih.gov/pubmed/",Pubmed,sep="")
-	}
-
-	#host
-	if (length(grep("/host=",GBFile))>0)
-	{	
-		Host <- strsplit(GBFile[grep("/host=",GBFile)],"host=",fixed=TRUE)[[1]][2]
-	}
-
-	#source
-	if (length(grep("/isolation_source=",GBFile))>0)
-	{	
-		Source <- strsplit(GBFile[grep("/isolation_source=",GBFile)],"isolation_source=",fixed=TRUE)[[1]][2]
-	}
-	
 	Sys.sleep(tsleep)
-			
-	out <- paste(X,Organism,DateSub,DateEch,Host,Source,Location,GPS,Authors,Titre,Journal,pubmedURL,sep=",")
-	out <- gsub("\"","",out)
-	out <- gsub("  "," ",out)
-	out <- gsub("  "," ",out)
-	out <- gsub("  "," ",out)
-	out <- gsub(", ",",",out)
+
+	out <- paste(X,Organism,isolate,Taxo,DateSub,DateEch,host,source,Location,GPS,authors,Titre,Journal,pubmedURL,sep="\t")
 	out
 }
+
+
+
 

@@ -1,12 +1,12 @@
 `InfoGenBank` <-
 function(X,tsleep=3)
 {	
-	machin <- NULL
+	gbout <- paste("AccNb","Organism","Isolate","Taxonomy","DateSub","DateEch","Host","Source","Location","GPS","Authors","Title","Journal","PubmedURL",sep="\t")
 	for(i in 1:length(X))
 	{
-		truc <- InfoGB(X[i],tsleep)
-		machin <- c(machin,truc)
+		gbi <- InfoGB(X[i],tsleep)
+		gbout <- c(gbout,gbi)
 	}
-machin
+gbout
 }
 

@@ -6,5 +6,6 @@ export(
        "InfoGenBank",
        "FastaSorter",
        "grpPhylogeo",
-       "read.PDB"
+       "read.PDB",
+       "distGPS"
        ) 

@@ -1,8 +1,8 @@
 Package: BoSSA
 Type: Package
 Title: a Bunch of Structure and Sequence Analysis
-Version: 1.0
-Date: 2009-12-03
+Version: 1.1
+Date: 2009-12-21
 Author: Pierre Lefeuvre
 Maintainer: Pierre Lefeuvre <bossa.package@gmail.com>
 Imports: ape, SoDA
@@ -13,6 +13,6 @@ Description: Sort sequence from genbank. Retrieve sequence information
         (protein 3D structure file).
 License: GPL
 LazyLoad: yes
-Packaged: Fri Dec 11 08:31:02 2009; pierre
+Packaged: Tue Dec 22 11:16:08 2009; pierre
 Repository: CRAN
-Date/Publication: 2009-12-11 07:03:40
+Date/Publication: 2009-12-22 09:25:23

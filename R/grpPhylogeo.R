@@ -1,5 +1,5 @@
 `grpPhylogeo` <-
-function(gbinfo,align,seuil=0.8,method="single",model="raw")
+function(gbinfo,align,seuil=0.1,method="single",model="raw",pairwise.deletion=TRUE)
 {
   al <- read.dna(align,format="fasta")
   gb <- read.csv(gbinfo,header=TRUE,colClasses="character")
@@ -18,7 +18,7 @@ function(gbinfo,align,seuil=0.8,method="single",model="raw")
   
   al <- al[gbal$nom]
   
-  gdist <- dist.dna(al,as.matrix=TRUE,model=model)
+  gdist <- dist.dna(al,as.matrix=TRUE,model=model,pairwise.deletion=pairwise.deletion)
   pdist <- distGPS(gbal)
   
   hc <- hclust(as.dist(pdist),method=method)
@@ -55,7 +55,7 @@ function(gbinfo,align,seuil=0.8,method="single",model="raw")
   
   for(i in 1:length(edgeCor))
   {
-    a <- (1:length(edgeCor[[i]]))[edgeCor[[i]]>seuil]
+    a <- (1:length(edgeCor[[i]]))[edgeCor[[i]]<seuil]
     
     edgeRec[[i]] <- a
   }
@@ -74,18 +74,13 @@ function(gbinfo,align,seuil=0.8,method="single",model="raw")
       nom2 <- match(nom,hc$labels)
       deb <- min(match(nom2,hc$order)) -0.5
       fin <- max(match(nom2,hc$order)) + 0.5
-      col=heat.colors(100-seuil*100)[100-floor(edgeCor[[i]][nb]*100)]
+      #col=heat.colors(seuil*100)[seuil*100-floor(edgeCor[[i]][nb[j]]*100)]
+      col="Red"
       lines(c(deb,deb),c(0,hc$height[i]),col=col)
       lines(c(fin,fin),c(0,hc$height[i]),col=col)
       lines(c(deb,fin),rep(hc$height[i],2),col=col)
-
-      #rect.hclust(hc,h=hc$height[i],cluster=grpframe2)
-      groupe <- mhc[,i]
-      sousGrp <- names(groupe[groupe==nb[j]])
-      out[[length(out)+1]] <- sousGrp
+      out[[length(out)+1]] <- nom
       }
-      
-
     }
   }
 out2 <- unique(out[2:length(out)])

@@ -6,7 +6,8 @@
   From an alignment of sequence (fasta format) and a csv file with colomns nom (name of the sequence), lon and lat (GPS coordinates in degree.decimals of the longitude and latitude of sampling of the sequence), the function define sets of sequence presenting phylogeography signal using a mantel test between physic and genetic distance matrices.
 }
 \usage{
-grpPhylogeo(gbinfo, align, seuil = 0.8, method = "single", model = "raw")
+grpPhylogeo(gbinfo, align, seuil = 0.1, method = "single",
+		model = "raw", pairwise.deletion=TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,9 +16,10 @@ grpPhylogeo(gbinfo, align, seuil = 0.8, method = "single", model = "raw")
   \item{seuil}{ significativity threshold for the mantel test }
   \item{method}{ clustering method used; set to "single" by default; See the hclust function for details }
   \item{model}{ DNA evolutionnary model use to compute genetic distance. Set to "raw" by default; See dist.dna (ape package) for details }
+  \item{pairwise.deletion}{ See dist.dna (ape package) for details }
 }
 \details{
-  The function draw a clustering plot (with physic distance represented) with color frame arround sequences with significative mantel test for correlation between physic and genetic distance. The color of the frame depends of the significativity of the test (the heat.colors scale is used).
+  The function draw a clustering plot (with physic distance represented) with a red frame arround sequences with significative mantel test for correlation between physic and genetic distance.
 }
 \value{
   A list of group of sequences with significative correlation between physic and genetic distance is returned.
