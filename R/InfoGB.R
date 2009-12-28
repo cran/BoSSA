@@ -26,10 +26,21 @@ function(X,tsleep=3)
 	DateEch <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="collection_date"]
 	GPS <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="lat_lon"]
 	source <- GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_value/#'][GB['INSDSet/INSDSeq/~^INSDSeq_feature/INSDFeature/INSDFeature_quals/INSDQualifier/INSDQualifier_name/#']=="isolation_source"]
+	if(length(host)>0)
+	{
+		hostname <- host
+		taxoHost <- TaxoGB(hostname)
+	}
+	else if(length(host)>0)
+	{		
+		hostname <- source
+		taxoHost <- TaxoGB(hostname)
+	}
+	else taxoHost <- "\t\t\t\t\t"
 
 	Sys.sleep(tsleep)
 
-	out <- paste(X,Organism,isolate,Taxo,DateSub,DateEch,host,source,Location,GPS,authors,Titre,Journal,pubmedURL,sep="\t")
+	out <- paste(X,Organism,isolate,Taxo,DateSub,DateEch,taxoHost,Location,GPS,authors,Titre,Journal,pubmedURL,sep="\t")
 	out
 }
 

@@ -4,8 +4,10 @@ import(ape, SoDA)
 
 export(
        "InfoGenBank",
+       "TaxoGB",
        "FastaSorter",
        "grpPhylogeo",
        "read.PDB",
+       "blast",
        "distGPS"
        ) 
