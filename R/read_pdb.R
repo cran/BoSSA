@@ -1,4 +1,4 @@
-`read.PDB` <-
+read_pdb <-
 function(X)
 {
   pdb <- scan(X,sep="\n",what="complex")
@@ -41,4 +41,3 @@ function(X)
   names(out) <- c("header","compound","atom","sequence")
   out
 }
-

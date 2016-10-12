@@ -1,13 +1,16 @@
-
-
-import(ape, SoDA)
-
-export(
-       "InfoGenBank",
-       "TaxoGB",
-       "FastaSorter",
-       "grpPhylogeo",
-       "read.PDB",
-       "blast",
-       "distGPS"
+export("read_sqlite",
+       "pplace_to_table",
+       "pplace_to_matrix",
+       "sub_pplace",
+       "pplace_tree",
+       "read_pdb"
        ) 
+import(ape)
+import(RSQLite)
+import(jsonlite)
+importFrom("grDevices", "colorRamp", "rgb")
+importFrom("graphics", "axis", "image", "layout", "par", "plot",
+             "plot.new", "points", "text")
+importFrom("stats", "aggregate")
+
+

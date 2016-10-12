@@ -1,16 +1,20 @@
-\name{read.PDB}
-\alias{read.PDB}
+\name{read_pdb}
+\alias{read_pdb}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{ read Protein Data Bank (PDB) file }
+\title{
+read Protein Data Bank (PDB) file 
+}
 \description{
-Read a PDB file (structure of a protein).
+read Protein Data Bank (PDB) file 
 }
 \usage{
-read.PDB(X)
+read_pdb(X)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{X}{The path/name of a pdb file.}
+  \item{X}{
+The path/name of a pdb file.
+}
 }
 \value{
 The output is a list of objects	
@@ -19,10 +23,13 @@ The output is a list of objects
   \item{atom}{a data frame with the atom type, the amino acid, the amino acid number, the chain and the euclidian X, Y, Z cooridnates of the atom}
   \item{sequence}{a list with the numbering of the amino acid and the amino acid sequence for each chain}
 }
-\author{Pierre Lefeuvre}
-
+\references{
+http://www.rcsb.org/pdb/home/home.do
+}
+\author{
+pierre lefeuvre
+}
 \examples{
-##obtain a pdb file the protein data bank
-##copy the pdb file to your current directory
-##pdb <- read.PDB("2B4C.pdb")}
-
+pdb_file <- system.file("extdata", "1L2M.pdb", package = "BoSSA")
+pdb <- read_pdb(pdb_file)
+}
