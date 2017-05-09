@@ -1,15 +1,13 @@
 read_sqlite <-
-function(SQLITE,jplace_file=NULL,rank="species"){
+function(sqlite_file,jplace_file=gsub("sqlite","jplace",sqlite_file),rank="species"){
   out <- list()
-  db <- dbConnect(SQLite(),dbname=SQLITE)
+  db <- dbConnect(SQLite(),dbname=sqlite_file)
   out$run <- dbGetQuery(db,"select * from runs")
-  if(is.null(jplace_file)) JPLACE <- gsub("sqlite","jplace",SQLITE)
-  if(!is.null(jplace_file)) JPLACE <- jplace_file
   out$taxo <- dbGetQuery(db,"select * from taxa")
   out$multiclass <- dbGetQuery(db,paste("select * from multiclass where want_rank=\'",rank,"\'",sep=""))
   out$placement <- dbGetQuery(db,"select * from placement_positions")
   if(nrow(out$multiclass)>0){
-    out <- c(out,read_jplace(JPLACE))
+    out <- c(out,read_jplace(jplace_file))
     pplacer_branch_id <- out$placement$location
     out$placement$location <- out$edge_key[1,match(pplacer_branch_id,out$edge_key[2,])]
     out$edge_key <- NULL
@@ -18,5 +16,6 @@ function(SQLITE,jplace_file=NULL,rank="species"){
     out$arbre <- NULL
   }
   dbDisconnect(db)
-  out
+  class(out) <- "pplace"
+  out  
 }

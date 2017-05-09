@@ -1,0 +1,29 @@
+{
+    "files": {
+        "phylo_model": "phylo_modelFagvg2.json", 
+        "taxonomy": "polerovirus_taxonomy.csv", 
+        "tree": "polerovirus_ROOTED.tre", 
+        "aln_fasta": "polerovirus_from_genbank_MAFFT.fasta", 
+        "seq_info": "polerovirus_info.csv", 
+        "tree_stats": "polerovirus_from_genbank_MAFFT.log"
+    }, 
+    "rollback": null, 
+    "log": [
+        "Stripped refpkg (removed 0 files)", 
+        "Loaded initial files into empty refpkg"
+    ], 
+    "metadata": {
+        "create_date": "2017-05-02 09:04:47", 
+        "format_version": "1.1", 
+        "locus": "polerovirus"
+    }, 
+    "rollforward": null, 
+    "md5": {
+        "phylo_model": "63cee6f550450c451bb6041516070881", 
+        "taxonomy": "307a074ec3d1427a5dcddf4b61db0000", 
+        "tree": "0f509a99f1bd2ca5c245a4a3290f4847", 
+        "aln_fasta": "869b9b1acc161288376533391bc81a6d", 
+        "seq_info": "aaece50c671f2d34cab7116b86d28af1", 
+        "tree_stats": "8742264f96b2446363f6dbc6538289ff"
+    }
+}

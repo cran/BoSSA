@@ -1,6 +1,5 @@
-read_pdb <-
-function(X)
-{
+read_protdb <-
+function(X){
   pdb <- scan(X,sep="\n",what="complex")
   category <- gsub(" ","",unlist(lapply(pdb,substring,1,6)))
   
@@ -23,8 +22,7 @@ function(X)
   
   sequence <- list(NULL)
   uch <- unique(atom$chain)
-  for(i in 1:length(uch))
-  {
+  for(i in 1:length(uch)){
     j <- i*2
     subatom <- atom[atom$chain==uch[i],]
     uaa <- unique(subatom$naa)
@@ -39,5 +37,6 @@ function(X)
   out[[3]] <- atom
   out[[4]] <- sequence
   names(out) <- c("header","compound","atom","sequence")
+  class(out) <- "protdb"
   out
 }

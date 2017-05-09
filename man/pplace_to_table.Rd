@@ -2,10 +2,10 @@
 \alias{pplace_to_table}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-merge the multiclass and the placement table of pplace object
+Merge the multiclass and the placement table of pplace object
 }
 \description{
-merge the multiclass and the placement table of pplace object
+Merge the multiclass and the placement table of pplace object
 }
 \usage{
 pplace_to_table(pplace, type = "full")
@@ -32,7 +32,9 @@ pierre lefeuvre
 
 data(pplace)
 
+### with every placement
 pplace_to_table(pplace)
 
+### keeping only the best placement for each sequence
 pplace_to_table(pplace,type="best")
 }

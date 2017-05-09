@@ -1,16 +1,30 @@
 export("read_sqlite",
        "pplace_to_table",
        "pplace_to_matrix",
+       "pplace_to_taxonomy",
        "sub_pplace",
-       "pplace_tree",
-       "read_pdb"
-       ) 
+       "refpkg",
+       "plot.pplace",
+       "print.pplace",
+       "print.protdb",
+       "read_protdb"
+       )
 import(ape)
 import(RSQLite)
 import(jsonlite)
+import(plotrix)
+import(phangorn)
 importFrom("grDevices", "colorRamp", "rgb")
 importFrom("graphics", "axis", "image", "layout", "par", "plot",
              "plot.new", "points", "text")
 importFrom("stats", "aggregate")
+importFrom("grDevices", "rainbow")
+importFrom("stats", "quantile")
+importFrom("utils", "read.csv")
+S3method(print,protdb)
+S3method(print,pplace)
+S3method(plot,pplace)
+
+
 
 

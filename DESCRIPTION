@@ -1,15 +1,17 @@
 Package: BoSSA
 Type: Package
-Title: a Bunch of Structure and Sequence Analysis
-Version: 2.0
-Date: 2016-10-04
+Title: A Bunch of Structure and Sequence Analysis
+Version: 2.1
+Date: 2017-05-03
 Author: pierre lefeuvre
 Maintainer: pierre lefeuvre <pierre.lefeuvre@cirad.fr>
-Depends: R (>= 3.1.2)
-Imports: ape, RSQLite, jsonlite
-Description: Reads and plots placements obtained using pplacer/guppy (see http://matsen.fhcrc.org/pplacer/ for details). Read PDB file (protein 3D structure file).
+Depends: R (>= 3.3.1)
+Imports: ape, RSQLite, jsonlite, phangorn, plotrix
+Suggests: BiocStyle, knitr, rmarkdown, XML, rentrez, phyloseq
+VignetteBuilder: knitr
+Description: Reads and plots phylogenetic placements obtained using the 'pplacer' and 'guppy' softwares <https://matsen.github.io/pplacer/>.
 License: GPL
 NeedsCompilation: no
-Packaged: 2016-10-12 04:34:51 UTC; lefeuvre
+Packaged: 2017-05-09 13:21:25 UTC; lefeuvre
 Repository: CRAN
-Date/Publication: 2016-10-12 21:02:27
+Date/Publication: 2017-05-09 21:26:36 UTC

@@ -2,35 +2,36 @@
 \alias{read_sqlite}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-read a pplacer/guppy sqlite file
+Read a pplacer/guppy sqlite file
 }
 \description{
-read a pplacer/guppy sqlite file
+Read a pplacer/guppy sqlite file
 }
 \usage{
-read_sqlite(SQLITE, jplace_file = NULL, rank = "species")
+read_sqlite(sqlite_file,jplace_file=gsub("sqlite","jplace",sqlite_file),
+rank="species")
 }
 \arguments{
-  \item{SQLITE}{
-a pplacer/guppy sqlite file name
+  \item{sqlite_file}{
+A pplacer/guppy sqlite file name
 }
   \item{jplace_file}{
-an optionnal jplace file name. By default, the jplace file path is obtained from the sqlite file.
+An optionnal jplace file name. By default, a jplace file with the same prefix as the sqlite file is made. If not, the jplace file path/name as to be specified.
 }
   \item{rank}{
-the desired taxonomic assignation rank to extract
+The desired taxonomic assignation rank to extract
 }
 }
 \details{
-the tree information are not contained in the sqlite file (obtained using guppt on the jplace file) but in the jplace file (obtained using pplacer). the path of the jplace file is available in the sqlite file. if for some reason this sqlite file is wrong (e.g. you move the file), you can indicate a new path for the japlce file using the jplace_file argument.
+As the tree informations are not available in the sqlite file, the jplace file is also required.
 }
 \value{
-a list with
-\item{run}{the command line used to obtained the sqlite file}
-\item{taxo}{the taxonomic information table}
-\item{multiclass}{the multiclass table}
-\item{placement}{the placement table}
-\item{arbre}{the tree in class "phylo" over wich placements are performed}
+A list with
+\item{run}{The command line used to obtained the sqlite file}
+\item{taxo}{The taxonomic information table}
+\item{multiclass}{The multiclass table}
+\item{placement}{The placement table}
+\item{arbre}{The tree in class "phylo" over wich placements are performed}
 }
 \author{
 pierre lefeuvre
@@ -39,7 +40,5 @@ pierre lefeuvre
 ### the path to the sqlite and jplace files
 sqlite_file <- system.file("extdata", "example.sqlite", package = "BoSSA")
 jplace_file <- system.file("extdata", "example.jplace", package = "BoSSA")
-### the default is to read the jplace file from the path available in the "run" item.
-### Since the path is different there, you must provide the jplace file path (here "jplace_file")
 pplace <- read_sqlite(sqlite_file,jplace_file=jplace_file)
 }

@@ -1,0 +1,220 @@
+---
+title: "Example of placement analysis using BoSSA"
+output: 
+  BiocStyle::html_document
+vignette: >
+  %\VignetteIndexEntry{Example of placement analysis using BoSSA}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}  
+---
+<!--
+%% \VignetteEngine{knitr::knitr}
+-->
+
+```{r style, echo = FALSE, results = 'asis'}
+BiocStyle::markdown()
+```
+
+Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
+
+[BoSSA CRAN page](https://cran.r-project.org/package=BoSSA)
+
+# Summary
+
+Phylogenetic placements represents mapping of query sequences to a reference phylogenetic tree. Put it another way, it corresponds to the position in a tree where a query sequence fits. Different tools exits to infer phylogenetic placements with the [EPA](http://sco.h-its.org/exelixis/web/software/epa/index.html) algorithm and [pplacer](http://matsen.fhcrc.org/pplacer/). Importantly, both EPA and pplacer produces placements under a common [file format](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009). Placements can later be analysed using the [guppy](https://matsen.github.io/pplacer/generated_rst/guppy.html) software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements as obtained using the guppy software. This vignette is intended to provide functional examples of placements analyses using BoSSA.
+
+# Important notes
+
+- Whereas guppy offer the possibility to feed a sqlite database multiple time (i.e. perform multiple classification run the same sqlite output), the BoSSA package is designed to handle sqlite files obtained after a single classification run.
+- The reference packages shiped with BoSSA are incomplete (they lack the alignment file) in order to reduce the package size. Whereas, the information available is sufficient to draw summary statistics, it won't be enough to perform actual phylogenetic placement.
+
+# How to obtain phylogentic placement file suitable for analysis with BoSSA ?
+
+Assuming you dispose of some query sequences (either full sequences,contigs or short reads) you want to assign to a phylogeny/taxonomy, the process to obtain phylogenetic placement is to (1) build a reference package that contains an align set of reference sequences and a reference phylogenetic tree, (2) align query sequences to the reference alignment, (3) use EPA or pplacer to infer placements (jplace file output, format describe [here](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009)) and (4) infer the classification of each sequences using guppy (sqlite file output).
+
+- The construction of the reference package could be a bit tricky. The [taxtastic](https://github.com/fhcrc/taxtastic) tool is extremely helpfull to this end. A tutorial can be find [here](http://fhcrc.github.io/taxtastic/quickstart.html). A BoSSA vignette on refpkg construction is also available.
+- [HMMER](http://hmmer.org/) and [MAFFT](http://mafft.cbrc.jp/alignment/software/addsequences.html) can be use to align sequences to a reference alignment.
+- For phylogenetic placement itself, detailed tutorials are available [here](http://armbrustlab.ocean.washington.edu/node/345) and [there](http://fhcrc.github.io/microbiome-demo/).
+
+Let's say you now dispose of a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). In the following examples the [reference package and jplace files](github.com/fhcrc/microbiome-demo/zipball/master) are subsets of examples files from the [Matsen group pplacer tutorials](http://fhcrc.github.io/microbiome-demo/). The sqlite file was obtained using the following command:
+
+```
+guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c example.refpkg --sqlite example.sqlite example.jplace
+```
+
+# Exploration of a reference package
+
+Let's start by loading the `BoSSA-package:
+
+```{r load-packages, message=FALSE, warning=FALSE}
+library("BoSSA")
+```
+
+A good practice would be to inspect the refpkg content.
+
+```{r }
+refpkg_path <- paste(find.package("BoSSA"),"/extdata/example.refpkg",sep="")
+refpkg(refpkg_path)
+```
+It is possible to extract the taxonomy of the sequences included in the refpkg.
+
+```{r }
+taxo <- refpkg(refpkg_path,type="taxonomy")
+head(taxo)
+```
+or display a pie chart that summarize the taxonomy...
+
+```{r pie1, fig.width=5, fig.height=5}
+refpkg(refpkg_path,type="pie",cex.text=0.5)
+```
+
+... or a subset of the taxonomy levels. Here, an example with the "class", "order" and "family" levels. Note there is a slight decay between the text labels and slices... this will need a fix for next package update.
+
+```{r pie2, fig.width=5, fig.height=5}
+refpkg(refpkg_path,type="pie",rank_pie=c("class","order","family"),cex.text=0.6)
+```
+
+Finally, a tree display with branch colored according to a given taxonomic level is available. Here tips are colored according to the "order" classification.
+
+```{r refseqtree, fig.width=8, fig.height=8}
+refpkg(refpkg_path,type="tree",rank_tree="class",cex.text=0.5)
+```
+
+# Loading the example data
+
+The BoSSA package come along with examples of phylogenetic placements from the Mastens group.
+
+```{r}
+sqlite_file <- system.file("extdata", "example.sqlite", package = "BoSSA")
+jplace_file <- system.file("extdata", "example.jplace", package = "BoSSA")
+```
+
+Note that the package reads the sqlite output from guppy but is not intended to work directly on the jplace file (may be available in  a further package update though). To read the data, use the `read_sqlite` function.
+
+```{r}
+pplace <- read_sqlite(sqlite_file,jplace_file)
+pplace
+```
+
+On screen a summary of the object is printed with the number of runs, the command line, the number of placements and the number of sequences being placed. Pplace objects are list with five components :
+
+```{r }
+str(pplace)
+```
+
+- the `run` element contains the run id and the command line summary
+- the `taxo` element is a data frame with the whole taxonomy available in the reference package 
+- the `multiclass` element is a data frame with the taxonomic assignation of each placement
+- the `placement` element is a data frame with the position of each placement over the reference phylogenetic tree
+- the `arbre` element is the class `phylo` object of the reference phylogenetic tree
+
+# Some plots
+
+Three different tree plots are available to display placements:
+
+- the `number` plot. Placement number associated to each branch is indicated. Note that this representation may be hard to read due to overlaps between number boxes. Placement numbers are obtained after the multiplication of their sizes with the ML ratio of the placement probabilities. Placement sizes are later round. A zero indicates a size superior to 0 but inferior to 1.
+
+```{r test1, fig.width=9, fig.height=9}
+plot(pplace,type="number",main="number",cex.number=1.5)
+```
+
+- the `color` plot is the best option. Branches with placement are colored according to the number of sequences they bear.
+
+```{r test2, fig.width=9,fig.height=9}
+plot(pplace,type="color",main="color",edge.width=2)
+```
+
+- in the `precise` plot dots are drawn at the exact placement positions. Whereas the color of the dots depend of the pendant branch length, their sizes depend on the placement sizes. Note that placements are drawn one above the other.
+
+```{r test3, fig.width=9,fig.height=9}
+plot(pplace,type="precise",main="precise")
+```
+
+Note that it is possible to apply a function to modify the dot size using the `transfo` option. In the following example, the dot size is multiplied by 2. In some other cases `log` or `log10` transformations could be usefull. Beware that when using the `transfo` option, the legend does not anymore correspond to the placement size but to the transform dot size (*i.e.* the transform function applied to the dot size).
+
+```{r test4, fig.width=9,fig.height=9}
+plot(pplace,type="precise",main="precise",transfo=function(X){X*2})
+```
+
+# Subsetting the pplace object
+
+Placement object can be subseted. This could be done using placements ids...
+
+```{r }
+sub1 <- sub_pplace(pplace,placement_id=1:100)
+sub1
+```
+
+...or using placements names.
+
+```{r }
+ids <- sample(pplace$multiclass$name,50)
+sub2 <- sub_pplace(pplace,ech_id=ids)
+sub2
+```
+
+# Conversion
+
+## To a table
+
+Using the `pplace_to_table` function produces a table taht contains the placement information along with the classification for each sequence. The output can be limited to the "best" placement (as in the example, i.e. the placements with the highest likelihood for each sequence).
+
+```{r }
+pplace_table <- pplace_to_table(pplace,type="best")
+head(pplace_table,n=3)
+```
+
+## To a contingency matrix
+
+The `pplace_to_matrix` produces a contingency table. Let say the first 50 sequences in the multiclass table correspond to sequence from "sample 1" and the following 50 correspond to "sample 2", the function output a ocntingency table for these two samples. You can either have the taxonomic names (tax_name=TRUE, in the example) or keep the taxonomic ids (tax_name=FALSE).
+
+```{r}
+example_contingency <- pplace_to_matrix(pplace,c(rep("sample1",50),rep("sample2",50)),tax_name=TRUE)
+example_contingency
+```
+
+## To a taxonomy
+
+Using the `pplace_to_taxonomy` function, a taxonomy table is compiled for each sequences with the taxonomy levels defined in the reference package. The taxonomy levels can be limited to a set of levels using the `rank` option.
+
+```{r}
+example_taxo <- pplace_to_taxonomy(pplace,taxo,tax_name=TRUE,rank=c("order","family","genus","species"))
+head(example_taxo)
+```
+
+## Make a phyloseq object
+
+Assuming the sequences in the pplace object represent centroids of sequence cluster you obtained from multiple samples, using the taxonomy table and an appropriate OTU file, you can create a phyloseq object.
+
+```{r}
+example_OTU <- matrix(sample(1:100, 500, replace = TRUE), nrow = 100, ncol = 5,dimnames=list(pplace$multiclass$name,paste("sample",1:5,sep="_")))
+head(example_OTU)
+```
+
+```{r}
+library(phyloseq)
+example_phyloseq <- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))
+example_phyloseq
+```
+
+# Citation
+
+If you find phyloseq and/or its tutorials useful, you may cite BoSSA:
+
+```{r}
+citation("BoSSA")
+```
+
+# Other resources
+
+## On phylogenetic placements
+[pplacer website](http://matsen.fhcrc.org/pplacer/) and [documentation](http://matsen.github.io/pplacer/)
+
+[taxtastic](https://github.com/fhcrc/taxtastic)
+
+## Other R package with a related topic
+[ggtree](https://bioconductor.org/packages/release/bioc/html/ggtree.html) and [clstutils](https://bioconductor.org/packages/release/bioc/html/clstutils.html)
+
+## R packages used by BoSSA
+[RSQLite](https://cran.r-project.org/package=RSQLite) and [jsonlite](https://cran.r-project.org/package=jsonlite) to read files, [ape](https://cran.r-project.org/package=ape) and [phangorn](https://cran.r-project.org/package=phangorn) to manipulate phylogenetic trees and [plotrix](https://cran.r-project.org/package=plotrix) for pie charts.
+
