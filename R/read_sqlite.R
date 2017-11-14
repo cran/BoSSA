@@ -7,7 +7,7 @@ function(sqlite_file,jplace_file=gsub("sqlite","jplace",sqlite_file),rank="speci
   out$multiclass <- dbGetQuery(db,paste("select * from multiclass where want_rank=\'",rank,"\'",sep=""))
   out$placement <- dbGetQuery(db,"select * from placement_positions")
   if(nrow(out$multiclass)>0){
-    out <- c(out,read_jplace(jplace_file))
+    out <- c(out,read_jplace(jplace_file,full=FALSE))
     pplacer_branch_id <- out$placement$location
     out$placement$location <- out$edge_key[1,match(pplacer_branch_id,out$edge_key[2,])]
     out$edge_key <- NULL

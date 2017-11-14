@@ -16,17 +16,17 @@ pplace_to_matrix(pplace, sample_info, N = NULL, tax_name = FALSE)
 A pplace object
 }
   \item{sample_info}{
-A vector specifying the association between placement (in the multiclass table) and sample
+A vector or list specifying the association between placement (in the multiclass table) and sample. In the case of a list, multiple sample can be associated with a single placement.
 }
   \item{N}{
-An optionnal vector with a number of occurence associated to each placed sequence
+An optionnal vector or list with a number of occurence associated to each placed sequence. If "sample_info" is a list, "N" must also be a list.
 }
   \item{tax_name}{
-Either the tax ids (default) or the tax names are used as column names. the tax names are obtained form the "taxo" table of the pplace object
+Either the tax ids (default) or the tax names are used as column names. The tax names are obtained form the "taxo" table of the pplace object.
 }
 }
 \value{
-A contingency matrix with OTUs / species in rows and samples in columns
+A contingency matrix with OTUs / species in rows and samples in columns.
 }
 \author{
 pierre lefeuvre

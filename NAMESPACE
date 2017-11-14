@@ -1,4 +1,5 @@
 export("read_sqlite",
+       "read_jplace",
        "pplace_to_table",
        "pplace_to_matrix",
        "pplace_to_taxonomy",
@@ -6,6 +7,7 @@ export("read_sqlite",
        "refpkg",
        "plot.pplace",
        "print.pplace",
+       "print.jplace",
        "print.protdb",
        "read_protdb"
        )
@@ -21,8 +23,10 @@ importFrom("stats", "aggregate")
 importFrom("grDevices", "rainbow")
 importFrom("stats", "quantile")
 importFrom("utils", "read.csv")
+importFrom("utils", "write.table")
 S3method(print,protdb)
 S3method(print,pplace)
+S3method(print,jplace)
 S3method(plot,pplace)
 
 

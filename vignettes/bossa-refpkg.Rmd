@@ -29,7 +29,7 @@ The reference packages shiped with BoSSA are incomplete (they lack the alignment
 
 # The polerovirus example
 
-Imagine you obtained some viral contigs that using BLAST (or some related similarity based search tools) were assigned to the *Polerovirus* genus. You want to obtain phylogenetic assignments of these sequences  using pplacer and now have to build a reference package for this genus.
+Imagine you obtained some viral contigs that using BLAST (or some related similarity based search tools) were assigned to the *Polerovirus* genus. You want to obtain phylogenetic placements of these sequences using pplacer and now have to build a reference package for this genus.
 
 A search on the [ICTV website](https://talk.ictvonline.org/ictv-reports/ictv_9th_report/positive-sense-rna-viruses-2011/w/posrna_viruses/265/luteoviridae) informs us that polerovirus belongs to the Luteovidiae family and that their "genome size is fairly uniform ranging from 5.6 kb to 6.0 kb".
 
@@ -67,7 +67,7 @@ r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refs
 r_search$count
 ```
 
-To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to 204.
+To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to 217.
 
 ```{r }
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",retmax=500)
@@ -86,6 +86,17 @@ all_recs <- entrez_fetch(db="nuccore", id=gi, rettype="gbc",retmode="xml",parsed
 rec_list <- xmlToList(all_recs)
 ```
 
+### For a large set of sequences
+
+Alternatively, when the number of sequence to recover is large (>500), you can use the use history option and fetch the sequence 500 by 500.
+
+```{r}
+r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",use_history=TRUE)
+all_recs <- NULL
+for(seq_start in seq(1,ceiling(r_search$count/500)*500,500)){
+     all_recs <- c(all_recs,entrez_fetch(db="nuccore", web_history=r_search$web_history,rettype="gb",retmax=500,retstart=seq_start))
+}
+```
 ### Extract the fasta from the XML
 
 We now extract the sequences and write a fasta formated file on the disk.
@@ -119,6 +130,8 @@ tree <- read.tree(paste(find.package("BoSSA"),"/extdata/polerovirus_from_genbank
 plot(tree,cex=0.4,no.margin=TRUE)
 nodelabels(cex=0.8)
 ```
+
+Note that using the "adjustdirection" during alignment, MAFFT generates reverse complement sequences and align them together with the remaining sequences. The best orientation is conserved for each sequence. When the reverse complement is aligned, the program add the "_R_" prefix in the name of the sequence. In this case and in order to keep the correspondance between informations files and sequences names, you'll have to edit back sequences names.
 
 After plotting the tree, and the node labels, it is apparent that the node 231 may be a good rooting point (may change depending on the sequence set you download *i.e.* as more poleroviruses sequences are upload to NCBI, the tree structure and node numbering will change).
 
@@ -201,10 +214,22 @@ refpkg(refpkg_path)
 refpkg(refpkg_path,type="tree",cex.text=0.3)
 ```
 
-- A pie chart summarizing the taxonomy with here again, the species level. Note there is a slight decay between the text labels and slices... this will need a fix for next package update.
+- A pie chart summarizing the taxonomy with here again, the species level. Note there is a slight decay between the text labels and slices...
 
 ```{r pie1, fig.width=5, fig.height=5}
 refpkg(refpkg_path,type="pie",rank_pie="species",cex.text=0.6)
+```
+
+- Alternatively, a input file for KronaTools to generate a krona chart could be generated.
+
+```{r}
+refpkg(refpkg_path,type="krona")
+```
+
+A file (default is for_krona.txt) is generated and can be used to generate a krona chart with the command:
+
+```
+ImportText.pl for_krona.txt
 ```
 
 # Subsample the refpkg
@@ -260,6 +285,9 @@ citation("BoSSA")
 
 ## Other R package with a related topic
 [ggtree](https://bioconductor.org/packages/release/bioc/html/ggtree.html) and [clstutils](https://bioconductor.org/packages/release/bioc/html/clstutils.html)
+
+## On krona charts
+[krona](https://github.com/marbl/Krona/wiki/KronaTools)
 
 ## R packages used by BoSSA
 [RSQLite](https://cran.r-project.org/package=RSQLite) and [jsonlite](https://cran.r-project.org/package=jsonlite) to read files, [ape](https://cran.r-project.org/package=ape) and [phangorn](https://cran.r-project.org/package=phangorn) to manipulate phylogenetic trees and [plotrix](https://cran.r-project.org/package=plotrix) for pie charts.

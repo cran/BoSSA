@@ -1,25 +1,25 @@
 \name{plot.pplace}
 \alias{plot.pplace}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\alias{plot.jplace}
 \title{
-Plot a pplace object
+Plot a pplace or jplace object
 }
 \description{
-Plot the tree and placements from a pplace object
+Plot the tree and placements from a pplace or a jplace object
 }
 \usage{
 \method{plot}{pplace}(x,type="precise",simplify=FALSE,
 		main="",N=NULL,transfo=NULL,legend=TRUE,stl=FALSE,
-		asb=FALSE,edge.width=1,cex.number=0.5,cex.text=0.8,
-		transp=80,add=FALSE,color=NULL,pch=16, ...)
+		asb=FALSE,edge.width=1,max_width=10,cex.number=0.5,
+		cex.text=0.8,transp=80,add=FALSE,color=NULL,pch=16, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-A pplace object
+A pplace or jplace object
 }
   \item{type}{
-The type of ploting desired with either, "precise", "color" or "number". For each option, placement sizes represent the multiplication of the N value with the placement ML ratio.
+The type of ploting desired with either, "precise", "color", "fattree" or "number". For each option, placement sizes represent the multiplication of the N value with the placement ML ratio.
 }
   \item{simplify}{
 If set to TRUE, only plot the best position for each placement. default is FALSE.
@@ -34,7 +34,7 @@ An optionnal vector with a number of occurence associated to each placed sequenc
 An optionnal function to transform the placement size when type set to "precise". Beware that it is also applied to the legend text so that it does not anymore correspond to the placement size but to the transform dot size
 }
   \item{legend}{
-Plot a legend
+Plot a legend. Not available for type "number" or "fattree"
 }
   \item{stl}{
 Show tip labels
@@ -44,6 +44,9 @@ Add scale bar
 }
   \item{edge.width}{
 The tree edge width
+}
+  \item{max_width}{
+The maximum edge width when type is set to "fattree"
 }
   \item{cex.number}{
 Control the size of the number when type is set to "number"
@@ -80,6 +83,9 @@ plot(pplace,type="number",main="number")
 ### color type without and with legend
 plot(pplace,type="color",main="color without legend",legend=FALSE)
 plot(pplace,type="color",main="color with legend",legend=TRUE)
+
+### fattree type
+plot(pplace,type="fattree",main="fattree")
 
 ### precise type
 plot(pplace,type="precise",main="precise vanilla")

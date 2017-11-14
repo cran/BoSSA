@@ -1,5 +1,5 @@
 plot.pplace <-
-function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE,stl=FALSE,asb=FALSE,edge.width=1,cex.number=0.5,cex.text=0.8,transp=80,add=FALSE,color=NULL,pch=16,...){
+function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE,stl=FALSE,asb=FALSE,edge.width=1,max_width=10,cex.number=0.5,cex.text=0.8,transp=80,add=FALSE,color=NULL,pch=16,...){
 
   if(is.null(N)){
     x$multiclass$N <- 1
@@ -22,6 +22,14 @@ function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE
       plot(x$arbre,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE)
       text(0,0,main,cex=cex.text,pos=4)
       edgelabels(round(br_sum[,2]),br_sum[,1],cex=cex.number)
+      if(asb) add.scale.bar()
+    }
+    
+    if(type=="fattree"){
+      vwidth <- rep(0.1,nrow(x$arbre$edge))
+      vwidth[br_sum[,1]] <- ceiling(max_width*br_sum[,2]/max(br_sum[,2]))
+      plot(x$arbre,edge.width=vwidth,show.tip.label=stl,no.margin=TRUE)
+      text(0,0,main,cex=cex.text,pos=4)
       if(asb) add.scale.bar()
     }
 
@@ -89,3 +97,8 @@ function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE
     }
   }
 }
+
+plot.jplace <- function(x,...){
+	plot.pplace(x,...)
+}
+

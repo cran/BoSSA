@@ -29,6 +29,13 @@ all_recs <- entrez_fetch(db="nuccore", id=gi, rettype="gbc",retmode="xml",parsed
 rec_list <- xmlToList(all_recs)
 
 ## ------------------------------------------------------------------------
+r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",use_history=TRUE)
+all_recs <- NULL
+for(seq_start in seq(1,ceiling(r_search$count/500)*500,500)){
+     all_recs <- c(all_recs,entrez_fetch(db="nuccore", web_history=r_search$web_history,rettype="gb",retmax=500,retstart=seq_start))
+}
+
+## ------------------------------------------------------------------------
 write(sapply(rec_list,function(X){paste(">",X$INSDSeq_locus,"\n",X$INSDSeq_sequence,sep="")}),"polerovirus_from_genbank.fasta")
 
 ## ------------------------------------------------------------------------
@@ -67,6 +74,9 @@ refpkg(refpkg_path,type="tree",cex.text=0.3)
 
 ## ----pie1, fig.width=5, fig.height=5-------------------------------------
 refpkg(refpkg_path,type="pie",rank_pie="species",cex.text=0.6)
+
+## ------------------------------------------------------------------------
+refpkg(refpkg_path,type="krona")
 
 ## ------------------------------------------------------------------------
 d <- cophenetic.phylo(root_tree)

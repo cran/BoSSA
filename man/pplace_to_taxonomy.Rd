@@ -28,18 +28,8 @@ Wether to use taxonomy names (default) or tax_id number
 }
 }
 \value{
-A matrix with taxonomic ranks fo each sequence
+A matrix with taxonomic ranks for each sequence
 }
 \author{
 pierre lefeuvre
-}
-\examples{
-
-data(pplace)
-
-### getting the taxonomy file
-# taxonomy <- refpkg(find.package("BoSSA"),"/extdata/example.refpkg",type="taxonomy")
-
-# pplace_to_taxonomy(pplace,taxonomy)
-
 }

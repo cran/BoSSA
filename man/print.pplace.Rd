@@ -1,11 +1,11 @@
 \name{print.pplace}
 \alias{print.pplace}
-%- Also NEED an '\alias' for EACH other topic documented here.
+\alias{print.jplace}
 \title{
-Compact display of pplace object
+Compact display of pplace and jplace objects
 }
 \description{
-Compact display of pplace object
+Compact display of pplace and jplace objects
 }
 \usage{
 \method{print}{pplace}(x, ...)
@@ -13,7 +13,7 @@ Compact display of pplace object
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{
-a pplace object
+a pplace or jplace object
 }
   \item{...}{
 further arguments passed to or from other methods
