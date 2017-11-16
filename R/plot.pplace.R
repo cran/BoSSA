@@ -36,7 +36,9 @@ function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE
     if(type=="color"){
       col_palette=rgb(colorRamp(c("blue","green","yellow","red"))(seq(0,1,length=100)), maxColorValue = 255)
       vcol <- rep("grey",nrow(x$arbre$edge))
-      vcol[br_sum[,1]] <- col_palette[ceiling(100*br_sum[,2]/max(br_sum[,2]))]
+	  coln <- ceiling(100*br_sum[,2]/max(br_sum[,2]))
+	  coln[coln>100] <- 100
+      vcol[br_sum[,1]] <- col_palette[coln]
       if(!legend){
 	plot(x$arbre,edge.color=vcol,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE)
 	text(0,0,main,cex=cex.text,pos=4)

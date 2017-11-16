@@ -36,7 +36,7 @@ Assuming you dispose of some query sequences (either full sequences,contigs or s
 - [HMMER](http://hmmer.org/) and [MAFFT](http://mafft.cbrc.jp/alignment/software/addsequences.html) can be use to align sequences to a reference alignment.
 - For phylogenetic placement itself, detailed tutorials are available [here](http://armbrustlab.ocean.washington.edu/node/345) and [there](http://fhcrc.github.io/microbiome-demo/).
 
-Let's say you now dispose of a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). Beside the files available with the package, you can find examples of [reference packages and jplaces files](github.com/fhcrc/microbiome-demo/zipball/master) from the [Matsen group pplacer tutorials](http://fhcrc.github.io/microbiome-demo/). The sqlite file was obtained using the following command:
+Let's say you now dispose of a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). The example files presented here are derived from other [reference packages and jplaces files](github.com/fhcrc/microbiome-demo/zipball/master) from the [Matsen group pplacer tutorials](http://fhcrc.github.io/microbiome-demo/). The sqlite file was obtained using the following command:
 
 ```
 guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c example.refpkg --sqlite example.sqlite example.jplace

@@ -7,10 +7,10 @@ Read a jplace file
 Read a jplace file
 }
 \usage{
-read_jplace(JPLACE, full = TRUE)
+read_jplace(jplace_file, full = TRUE)
 }
 \arguments{
-  \item{JPLACE}{
+  \item{jplace_file}{
 A jplace file name
 }
   \item{full}{
@@ -22,6 +22,7 @@ A list with
 \item{arbre}{The tree in class "phylo" over wich placements are performed}
 \item{placement}{The placement table}
 \item{multiclass}{The multiclass table}
+\item{run}{The command line used to obtained the jplace file}
 }
 \author{
 pierre lefeuvre

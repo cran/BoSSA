@@ -1,6 +1,6 @@
 read_jplace <-
-function(JPLACE,full=TRUE){
-  json_data <- fromJSON(JPLACE)
+function(jplace_file,full=TRUE){
+  json_data <- fromJSON(jplace_file)
   arbre <- json_data[[1]]
   arbre2 <- gsub("}","",gsub("{","#",arbre,fixed=TRUE),fixed=TRUE)
   arbre3 <- read.tree(text=gsub("#","",gsub(":[0-9].[0-9]+#",":",gsub("e-","",arbre2))))
@@ -33,6 +33,8 @@ function(JPLACE,full=TRUE){
     pplacer_branch_id <- out$placement$location
     out$placement$location <- out$edge_key[1,match(pplacer_branch_id,out$edge_key[2,])]
     out$edge_key <- NULL
+    
+    out$run <- as.character(json_data[[3]][1])
     
     class(out) <- "jplace"
   }

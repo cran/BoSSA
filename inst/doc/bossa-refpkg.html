@@ -132,17 +132,17 @@ r_search$ids</code></pre>
 <p>… and use this id (119164) to query the nucleotide database. Note that we remove the reference sequence set from the search (using “NOT srcdb_refseq[PROP]”) as these are duplicates from records already available in the nucleotide database.</p>
 <pre class="r"><code>r_search &lt;- entrez_search(db=&quot;nucleotide&quot;, term=&quot;txid119164[orgn] NOT srcdb_refseq[PROP]&quot;)
 r_search$count</code></pre>
-<pre><code>## [1] 2009</code></pre>
+<pre><code>## [1] 2010</code></pre>
 <p>This number represents the total number of sequences from the genus polerovirus. We will now search for full genomes using the “AND 5000:6500[slen]” query.</p>
 <pre class="r"><code>r_search &lt;- entrez_search(db=&quot;nucleotide&quot;, term=&quot;txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]&quot;)
 r_search$count</code></pre>
-<pre><code>## [1] 217</code></pre>
+<pre><code>## [1] 218</code></pre>
 <p>To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to 217.</p>
 <pre class="r"><code>r_search &lt;- entrez_search(db=&quot;nucleotide&quot;, term=&quot;txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]&quot;,retmax=500)
 gi &lt;- r_search$ids
 gi[1:10]</code></pre>
-<pre><code>##  [1] &quot;1273125991&quot; &quot;1150392760&quot; &quot;1150392753&quot; &quot;1249618374&quot; &quot;1249618367&quot;
-##  [6] &quot;1233272172&quot; &quot;1231168768&quot; &quot;1229035895&quot; &quot;1215380899&quot; &quot;1215380893&quot;</code></pre>
+<pre><code>##  [1] &quot;1274591412&quot; &quot;1273125991&quot; &quot;1150392760&quot; &quot;1150392753&quot; &quot;1249618374&quot;
+##  [6] &quot;1249618367&quot; &quot;1233272172&quot; &quot;1231168768&quot; &quot;1229035895&quot; &quot;1215380899&quot;</code></pre>
 </div>
 <div id="download-all-these-sequences" class="section level2">
 <h2><span class="header-section-number">3.3</span> Download all these sequences</h2>
@@ -238,7 +238,7 @@ rppr info -c polerovirus.refpk</code></pre>
 refpkg(refpkg_path)</code></pre>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/RtmpBgTh5a/Rinst69912bf019b/BoSSA/extdata/polerovirus.refpkg
+## Path:/tmp/RtmpdNIu3c/Rinst31784f226967/BoSSA/extdata/polerovirus.refpkg
 ## 
 ## Tree with 204 tips 203 nodes
 ## 
@@ -306,7 +306,7 @@ write.tree(root_tree2,&quot;polerovirus_ROOTED_SUBSAMPLED.tre&quot;)</code></pre
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2017). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 2.2.
+##   Analysis. R package version 2.3.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -314,7 +314,7 @@ write.tree(root_tree2,&quot;polerovirus_ROOTED_SUBSAMPLED.tre&quot;)</code></pre
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2017},
-##     note = {R package version 2.2},
+##     note = {R package version 2.3},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from

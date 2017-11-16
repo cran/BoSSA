@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <li><a href="http://hmmer.org/">HMMER</a> and <a href="http://mafft.cbrc.jp/alignment/software/addsequences.html">MAFFT</a> can be use to align sequences to a reference alignment.</li>
 <li>For phylogenetic placement itself, detailed tutorials are available <a href="http://armbrustlab.ocean.washington.edu/node/345">here</a> and <a href="http://fhcrc.github.io/microbiome-demo/">there</a>.</li>
 </ul>
-<p>Let’s say you now dispose of a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). Beside the files available with the package, you can find examples of <a href="github.com/fhcrc/microbiome-demo/zipball/master">reference packages and jplaces files</a> from the <a href="http://fhcrc.github.io/microbiome-demo/">Matsen group pplacer tutorials</a>. The sqlite file was obtained using the following command:</p>
+<p>Let’s say you now dispose of a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). The example files presented here are derived from other <a href="github.com/fhcrc/microbiome-demo/zipball/master">reference packages and jplaces files</a> from the <a href="http://fhcrc.github.io/microbiome-demo/">Matsen group pplacer tutorials</a>. The sqlite file was obtained using the following command:</p>
 <pre><code>guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c example.refpkg --sqlite example.sqlite example.jplace</code></pre>
 </div>
 <div id="exploration-of-a-reference-package" class="section level1">
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
 refpkg(refpkg_path)</code></pre>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/RtmpBgTh5a/Rinst69912bf019b/BoSSA/extdata/example.refpkg
+## Path:/tmp/RtmpdNIu3c/Rinst31784f226967/BoSSA/extdata/example.refpkg
 ## 
 ## Tree with 652 tips 650 nodes
 ## 
@@ -294,7 +294,7 @@ sub2</code></pre>
 ## run: 1
 ## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c vaginal_16s.refpkg --sqlite example.sqlite example.jplace
 ## sequence nb: 50
-## placement nb: 18</code></pre>
+## placement nb: 23</code></pre>
 </div>
 <div id="conversion" class="section level1">
 <h1><span class="header-section-number">8</span> Conversion</h1>
@@ -363,12 +363,12 @@ head(example_taxo)</code></pre>
 <pre class="r"><code>example_OTU &lt;- matrix(sample(1:100, 500, replace = TRUE), nrow = 100, ncol = 5,dimnames=list(pplace$multiclass$name,paste(&quot;sample&quot;,1:5,sep=&quot;_&quot;)))
 head(example_OTU)</code></pre>
 <pre><code>##                sample_1 sample_2 sample_3 sample_4 sample_5
-## GLKT0ZE01A0Y5X       36       28       59       34       44
-## GLKT0ZE01A1B65       16       31       30       12       39
-## GLKT0ZE01A608I       69       77       66       77        8
-## GLKT0ZE01A6F1M       96       83       16       98       84
-## GLKT0ZE01AH4NR       34       66       88       73       86
-## GLKT0ZE01AHXIQ       11       64       48       87       51</code></pre>
+## GLKT0ZE01A0Y5X       42       96       34       74       36
+## GLKT0ZE01A1B65       23        8       33       17       28
+## GLKT0ZE01A608I       43       49       77       75       15
+## GLKT0ZE01A6F1M       34       68       71        6       96
+## GLKT0ZE01AH4NR       62        2       21       62       29
+## GLKT0ZE01AHXIQ       77       96       20       92       85</code></pre>
 <pre class="r"><code>library(phyloseq)
 example_phyloseq &lt;- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))
 example_phyloseq</code></pre>
@@ -385,7 +385,7 @@ example_phyloseq</code></pre>
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2017). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 2.2.
+##   Analysis. R package version 2.3.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -393,7 +393,7 @@ example_phyloseq</code></pre>
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2017},
-##     note = {R package version 2.2},
+##     note = {R package version 2.3},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from
