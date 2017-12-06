@@ -10,7 +10,7 @@ Convert a pplace object to a taxonomy table
 \usage{
 pplace_to_taxonomy(pplace,taxonomy,
 rank=c("phylum","class","order","family","genus","species"),
-tax_name=TRUE)
+tax_name=TRUE,run_id=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -25,6 +25,9 @@ The desired rank for the taxonomy table
 }
   \item{tax_name}{
 Wether to use taxonomy names (default) or tax_id number
+}
+  \item{run_id}{
+A vector of run_id to subset
 }
 }
 \value{

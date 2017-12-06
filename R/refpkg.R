@@ -32,6 +32,9 @@ refpkg <- function (refpkg_path, type = "summary", rank_tree = "species",
     if (type == "taxonomy") {
         return(taxo)
     }
+ 	if (type == "info") {
+        return(info)
+    }
     if (type == "tree") {
         desc <- Descendants(tree, (length(tree$t) + 1):(length(tree$t) + 
             tree$Nnode), type = "tips")

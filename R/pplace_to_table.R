@@ -1,16 +1,23 @@
 pplace_to_table <-
-function(pplace,type="full"){
-  out <- NULL
-  if(nrow(pplace$multiclass)>0){
-    if(type=="full"){
-      pos <- lapply(pplace$multiclass$placement_id,function(X,Y){(1:length(Y))[Y==X]},pplace$placement$placement_id)
-      out <- cbind(pplace$multiclass[ rep(1:length(pos),times=sapply(pos,length)),],pplace$placement[unlist(pos),])[,-7]
-    }
-    if(type=="best"){
-      pos <- match(pplace$multiclass$placement_id,pplace$placement$placement_id)
-      out <- cbind(pplace$multiclass,pplace$placement[pos,])[,-7]
-    }
-    rownames(out) <- NULL
+function(pplace,type="full",run_id=NULL){
+  if(class(pplace)!="pplace"){
+    return("ERROR: the input is not an object of class pplace")
   }
-  out
+  if(class(pplace)=="pplace"){
+    if(!is.null(run_id)){
+      pplace <- sub_pplace(pplace,run_id=run_id)
+    }
+    out <- NULL
+    if(nrow(pplace$multiclass)>0){
+      out <- merge(pplace$multiclass,pplace$placement_positions,by="placement_id")
+      if(type=="best"){
+	out <- out[order(out$ml_ratio,decreasing=TRUE),]
+	out <- out[match(unique(out$placement_id),out[,1]),]
+      }
+    }
+    out <- out[order(out$placement_id),]
+    rownames(out) <- NULL
+    colnames(out)[c(5,12)] <- c("tax_id_multilcass","tax_id_placement")
+    return(out)
+  }
 }

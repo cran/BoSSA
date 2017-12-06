@@ -11,7 +11,8 @@ Plot the tree and placements from a pplace or a jplace object
 \method{plot}{pplace}(x,type="precise",simplify=FALSE,
 		main="",N=NULL,transfo=NULL,legend=TRUE,stl=FALSE,
 		asb=FALSE,edge.width=1,max_width=10,cex.number=0.5,
-		cex.text=0.8,transp=80,add=FALSE,color=NULL,pch=16, ...)
+		cex.text=0.8,transp=80,add=FALSE,color=NULL,discrete_col=FALSE,
+		pch=16,run_id=NULL, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -63,8 +64,14 @@ Add placement to an existing plot when type is set to precise. default is FALSE
   \item{color}{
 The colors used for pendant branch length scale when type is set to "precise". Default is a color ramp with "blue", "green", "yellow" and "red"
 }
+  \item{discrete_col}{
+Discretise the color scale for pendant branch length
+}
   \item{pch}{
 The dot style used for placements when type is set to "precise"
+}
+  \item{run_id}{
+A vector of run_id to subset
 }
   \item{...}{
 Further arguments passed to or from other methods.
@@ -92,7 +99,7 @@ plot(pplace,type="precise",main="precise vanilla")
 plot(pplace,type="precise",simplify=TRUE,main="precise simplify")
 
 # using the read number information encoded here in the name (if available)
-Npplace <- as.numeric(gsub(".*_","",pplace$multiclass$name))
+Npplace <- sample(1:100,nrow(pplace$multiclass),replace=TRUE)
 # in the following exemple, the dots are too large...
 plot(pplace,type="precise",main="precise N",legend=TRUE,N=Npplace,simplify=TRUE)
 

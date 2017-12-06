@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <div id="TOC">
 <ul>
 <li><a href="#summary"><span class="toc-section-number">1</span> Summary</a></li>
-<li><a href="#important-notes"><span class="toc-section-number">2</span> Important notes</a></li>
+<li><a href="#important-note"><span class="toc-section-number">2</span> Important note</a></li>
 <li><a href="#how-to-obtain-phylogentic-placement-file-suitable-for-analysis-with-bossa"><span class="toc-section-number">3</span> How to obtain phylogentic placement file suitable for analysis with BoSSA ?</a></li>
 <li><a href="#exploration-of-a-reference-package"><span class="toc-section-number">4</span> Exploration of a reference package</a></li>
 <li><a href="#loading-the-example-data"><span class="toc-section-number">5</span> Loading the example data</a></li>
@@ -95,12 +95,11 @@ document.addEventListener("DOMContentLoaded", function() {
 <p><a href="https://cran.r-project.org/package=BoSSA">BoSSA CRAN page</a></p>
 <div id="summary" class="section level1">
 <h1><span class="header-section-number">1</span> Summary</h1>
-<p>Phylogenetic placements represents mapping of query sequences to a reference phylogenetic tree. Put it another way, it corresponds to the position in a tree where a query sequence fits. Different tools exits to infer phylogenetic placements with the <a href="http://sco.h-its.org/exelixis/web/software/epa/index.html">EPA</a> algorithm and <a href="http://matsen.fhcrc.org/pplacer/">pplacer</a>. Importantly, both EPA and pplacer produces placements under a common <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009">file format</a>. Placements can later be analysed using the <a href="https://matsen.github.io/pplacer/generated_rst/guppy.html">guppy</a> software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide functional examples of placements analyses using BoSSA.</p>
+<p>Phylogenetic placements represents mapping of query sequences to a reference phylogenetic tree. Put it another way, it corresponds to the position in a tree where a query sequence fits. Different tools exits to infer phylogenetic placements, such as <a href="http://matsen.fhcrc.org/pplacer/">pplacer</a> and <a href="http://sco.h-its.org/exelixis/web/software/epa/index.html">EPA</a>. Importantly, both pplacer and EPA produces placements under a common <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009">file format</a>. Placements can later be analysed using the <a href="https://matsen.github.io/pplacer/generated_rst/guppy.html">guppy</a> software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide functional examples of placements analyses using BoSSA.</p>
 </div>
-<div id="important-notes" class="section level1">
-<h1><span class="header-section-number">2</span> Important notes</h1>
+<div id="important-note" class="section level1">
+<h1><span class="header-section-number">2</span> Important note</h1>
 <ul>
-<li>Whereas guppy offer the possibility to feed a sqlite database multiple time (i.e. perform multiple classification run the same sqlite output), the BoSSA package is designed to handle sqlite files obtained after a single classification run.</li>
 <li>The reference packages shiped with BoSSA are incomplete (they lack the alignment file) in order to reduce the package size. Whereas, the information available is sufficient to draw summary statistics, it won’t be enough to perform actual phylogenetic placement.</li>
 </ul>
 </div>
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <li>For phylogenetic placement itself, detailed tutorials are available <a href="http://armbrustlab.ocean.washington.edu/node/345">here</a> and <a href="http://fhcrc.github.io/microbiome-demo/">there</a>.</li>
 </ul>
 <p>Let’s say you now dispose of a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). The example files presented here are derived from other <a href="github.com/fhcrc/microbiome-demo/zipball/master">reference packages and jplaces files</a> from the <a href="http://fhcrc.github.io/microbiome-demo/">Matsen group pplacer tutorials</a>. The sqlite file was obtained using the following command:</p>
-<pre><code>guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c example.refpkg --sqlite example.sqlite example.jplace</code></pre>
+<pre><code>guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace</code></pre>
 </div>
 <div id="exploration-of-a-reference-package" class="section level1">
 <h1><span class="header-section-number">4</span> Exploration of a reference package</h1>
@@ -124,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function() {
 refpkg(refpkg_path)</code></pre>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/RtmpdNIu3c/Rinst31784f226967/BoSSA/extdata/example.refpkg
+## Path:/tmp/RtmpnWquT1/Rinst2c74139d3245/BoSSA/extdata/example.refpkg
 ## 
 ## Tree with 652 tips 650 nodes
 ## 
@@ -207,27 +206,43 @@ jplace_file &lt;- system.file(&quot;extdata&quot;, &quot;example.jplace&quot;, p
 pplace</code></pre>
 <pre><code>## pplace object
 ## run: 1
-## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c vaginal_16s.refpkg --sqlite example.sqlite example.jplace
+## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
+## Placement on a phylogenetic tree with 652 tips and 650 internal nodes.
 ## sequence nb: 100
 ## placement nb: 30</code></pre>
-<p>On screen a summary of the object is printed with the number of runs, the command line, the number of placements and the number of sequences being placed. Pplace objects are list with five components :</p>
+<p>On screen a summary of the object is printed with the number of runs, the command line, a short description of the phylogenetic tree, the number of placements and the number of sequences being placed. Pplace objects are list with 15 components, with 12 components being outputs from a <a href="https://matsen.github.io/pplacer/generated_rst/guppy_classify.html#guppy-classify">guppy classify</a> run and the last three corresponding to the phylogenetic tree used for placement:</p>
 <pre class="r"><code>str(pplace)</code></pre>
-<pre><code>## List of 5
-##  $ run       :'data.frame':  1 obs. of  2 variables:
-##   ..$ run_id: int 1
-##   ..$ params: chr &quot;/home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --bayes-cutoff 0 --multiclass-min 0 --c&quot;| __truncated__
-##  $ taxo      :'data.frame':  281 obs. of  3 variables:
-##   ..$ tax_id  : chr [1:281] &quot;1&quot; &quot;103621&quot; &quot;109790&quot; &quot;113286&quot; ...
-##   ..$ tax_name: chr [1:281] &quot;root&quot; &quot;Actinomyces urogenitalis&quot; &quot;Lactobacillus jensenii&quot; &quot;Pseudoramibacter&quot; ...
-##   ..$ rank    : chr [1:281] &quot;root&quot; &quot;species&quot; &quot;species&quot; &quot;genus&quot; ...
-##  $ multiclass:'data.frame':  100 obs. of  6 variables:
+<pre><code>## List of 15
+##  $ multiclass                 :'data.frame': 100 obs. of  6 variables:
 ##   ..$ placement_id: int [1:100] 28 22 1 28 5 3 9 28 17 28 ...
 ##   ..$ name        : chr [1:100] &quot;GLKT0ZE01A0Y5X&quot; &quot;GLKT0ZE01A1B65&quot; &quot;GLKT0ZE01A608I&quot; &quot;GLKT0ZE01A6F1M&quot; ...
 ##   ..$ want_rank   : chr [1:100] &quot;species&quot; &quot;species&quot; &quot;species&quot; &quot;species&quot; ...
-##   ..$ rank        : chr [1:100] &quot;species&quot; &quot;species&quot; &quot;species&quot; &quot;species&quot; ...
-##   ..$ tax_id      : chr [1:100] &quot;40543&quot; &quot;187101&quot; &quot;906_1&quot; &quot;40543&quot; ...
-##   ..$ likelihood  : num [1:100] 1 0.857 1 1 1 ...
-##  $ placement :'data.frame':  193 obs. of  9 variables:
+##   ..$ rank        : chr [1:100] &quot;species&quot; &quot;genus&quot; &quot;species&quot; &quot;species&quot; ...
+##   ..$ tax_id      : chr [1:100] &quot;40543&quot; &quot;168808&quot; &quot;906_1&quot; &quot;40543&quot; ...
+##   ..$ likelihood  : num [1:100] 1 1 1 1 1 ...
+##  $ placement_classifications  :'data.frame': 280 obs. of  3 variables:
+##   ..$ placement_id: int [1:280] 1 1 1 1 1 1 1 1 1 2 ...
+##   ..$ tax_id      : chr [1:280] &quot;1&quot; &quot;131567&quot; &quot;2&quot; &quot;1239&quot; ...
+##   ..$ likelihood  : num [1:280] 1 1 1 1 1 ...
+##  $ placement_evidence         :'data.frame': 630 obs. of  4 variables:
+##   ..$ placement_id: int [1:630] 1 1 1 1 1 1 1 1 1 1 ...
+##   ..$ rank        : chr [1:630] &quot;root&quot; &quot;below_root&quot; &quot;superkingdom&quot; &quot;below_superkingdom&quot; ...
+##   ..$ evidence    : num [1:630] 0 0 0 0 0 0 0 0 0 0 ...
+##   ..$ bayes_factor: num [1:630] NA NA NA NA NA NA NA NA NA NA ...
+##  $ placement_median_identities:'data.frame': 0 obs. of  3 variables:
+##   ..$ placement_id           : int(0) 
+##   ..$ tax_id                 : chr(0) 
+##   ..$ median_percent_identity: num(0) 
+##  $ placement_names            :'data.frame': 100 obs. of  4 variables:
+##   ..$ placement_id: int [1:100] 1 2 2 3 3 3 4 4 4 5 ...
+##   ..$ name        : chr [1:100] &quot;GLKT0ZE01A608I&quot; &quot;GLKT0ZE01DNHR0&quot; &quot;GLKT0ZE01EDYPL&quot; &quot;GLKT0ZE01AHXIQ&quot; ...
+##   ..$ origin      : chr [1:100] &quot;example&quot; &quot;example&quot; &quot;example&quot; &quot;example&quot; ...
+##   ..$ mass        : num [1:100] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ placement_nbc              :'data.frame': 0 obs. of  3 variables:
+##   ..$ placement_id: int(0) 
+##   ..$ tax_id      : chr(0) 
+##   ..$ bootstrap   : num(0) 
+##  $ placement_positions        :'data.frame': 193 obs. of  9 variables:
 ##   ..$ placement_id      : int [1:193] 1 1 1 1 1 1 1 2 2 2 ...
 ##   ..$ location          : num [1:193] 555 556 553 552 557 554 550 111 115 113 ...
 ##   ..$ ml_ratio          : num [1:193] 0.143 0.143 0.143 0.143 0.143 ...
@@ -237,7 +252,24 @@ pplace</code></pre>
 ##   ..$ tax_id            : chr [1:193] &quot;906_1&quot; &quot;906_1&quot; &quot;906_1&quot; &quot;906_1&quot; ...
 ##   ..$ map_identity_ratio: num [1:193] NA NA NA NA NA NA NA NA NA NA ...
 ##   ..$ map_identity_denom: int [1:193] NA NA NA NA NA NA NA NA NA NA ...
-##  $ arbre     :List of 5
+##  $ placements                 :'data.frame': 30 obs. of  3 variables:
+##   ..$ placement_id: int [1:30] 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ classifier  : chr [1:30] &quot;pplacer&quot; &quot;pplacer&quot; &quot;pplacer&quot; &quot;pplacer&quot; ...
+##   ..$ run_id      : int [1:30] 1 1 1 1 1 1 1 1 1 1 ...
+##  $ ranks                      :'data.frame': 21 obs. of  2 variables:
+##   ..$ rank      : chr [1:21] &quot;root&quot; &quot;below_root&quot; &quot;superkingdom&quot; &quot;below_superkingdom&quot; ...
+##   ..$ rank_order: int [1:21] 0 1 2 3 4 5 6 7 8 9 ...
+##  $ runs                       :'data.frame': 1 obs. of  2 variables:
+##   ..$ run_id: int 1
+##   ..$ params: chr &quot;/home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --multiclass-min 0 --cutoff 0.5 -c exam&quot;| __truncated__
+##  $ sqlite_sequence            :'data.frame': 2 obs. of  2 variables:
+##   ..$ name: chr [1:2] &quot;runs&quot; &quot;placements&quot;
+##   ..$ seq : int [1:2] 1 30
+##  $ taxa                       :'data.frame': 281 obs. of  3 variables:
+##   ..$ tax_id  : chr [1:281] &quot;1&quot; &quot;103621&quot; &quot;109790&quot; &quot;113286&quot; ...
+##   ..$ tax_name: chr [1:281] &quot;root&quot; &quot;Actinomyces urogenitalis&quot; &quot;Lactobacillus jensenii&quot; &quot;Pseudoramibacter&quot; ...
+##   ..$ rank    : chr [1:281] &quot;root&quot; &quot;species&quot; &quot;species&quot; &quot;genus&quot; ...
+##  $ arbre                      :List of 5
 ##   ..$ edge       : int [1:1301, 1:2] 653 654 655 656 657 658 658 657 656 659 ...
 ##   ..$ Nnode      : int 650
 ##   ..$ tip.label  : chr [1:652] &quot;S000010758&quot; &quot;S002034883&quot; &quot;S000006177&quot; &quot;S001188095&quot; ...
@@ -245,14 +277,10 @@ pplace</code></pre>
 ##   ..$ root.edge  : num 0
 ##   ..- attr(*, &quot;class&quot;)= chr &quot;phylo&quot;
 ##   ..- attr(*, &quot;order&quot;)= chr &quot;cladewise&quot;
+##  $ edge_key                   : num [1:2, 1:1301] 1 1298 2 1296 3 ...
+##  $ original_tree              : chr &quot;((((((S000010758:0.0192957{0},S002034883:0.0325555{1}):0.113088{2},S000006177:0.204859{3}):0.129507{4},(S001188095:0.00721428{5&quot;| __truncated__
 ##  - attr(*, &quot;class&quot;)= chr &quot;pplace&quot;</code></pre>
-<ul>
-<li>the <code>run</code> element contains the run id and the command line summary</li>
-<li>the <code>taxo</code> element is a data frame with the whole taxonomy available in the reference package</li>
-<li>the <code>multiclass</code> element is a data frame with the taxonomic assignation of each placement</li>
-<li>the <code>placement</code> element is a data frame with the position of each placement over the reference phylogenetic tree</li>
-<li>the <code>arbre</code> element is the class <code>phylo</code> object of the reference phylogenetic tree</li>
-</ul>
+<p>Among these: - the <code>run</code> element contains the run id and the command line summary - the <code>taxa</code> element is a data frame with the whole taxonomy available in the reference package - the <code>multiclass</code> element is a data frame with the taxonomic assignation of each placement - the <code>placement_positions</code> element is a data frame with the position of each placement over the reference phylogenetic tree - the <code>arbre</code> element is the class <code>phylo</code> object of the reference phylogenetic tree</p>
 </div>
 <div id="some-plots" class="section level1">
 <h1><span class="header-section-number">6</span> Some plots</h1>
@@ -283,7 +311,8 @@ pplace</code></pre>
 sub1</code></pre>
 <pre><code>## pplace object
 ## run: 1
-## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c vaginal_16s.refpkg --sqlite example.sqlite example.jplace
+## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
+## Placement on a phylogenetic tree with 652 tips and 650 internal nodes.
 ## sequence nb: 100
 ## placement nb: 30</code></pre>
 <p>…or using placements names.</p>
@@ -292,9 +321,10 @@ sub2 &lt;- sub_pplace(pplace,ech_id=ids)
 sub2</code></pre>
 <pre><code>## pplace object
 ## run: 1
-## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c vaginal_16s.refpkg --sqlite example.sqlite example.jplace
+## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
+## Placement on a phylogenetic tree with 652 tips and 650 internal nodes.
 ## sequence nb: 50
-## placement nb: 23</code></pre>
+## placement nb: 19</code></pre>
 </div>
 <div id="conversion" class="section level1">
 <h1><span class="header-section-number">8</span> Conversion</h1>
@@ -303,36 +333,36 @@ sub2</code></pre>
 <p>Using the <code>pplace_to_table</code> function produces a table taht contains the placement information along with the classification for each sequence. The output can be limited to the “best” placement (as in the example, i.e. the placements with the highest likelihood for each sequence).</p>
 <pre class="r"><code>pplace_table &lt;- pplace_to_table(pplace,type=&quot;best&quot;)
 head(pplace_table,n=3)</code></pre>
-<pre><code>##   placement_id           name want_rank    rank tax_id likelihood location
-## 1           28 GLKT0ZE01A0Y5X   species species  40543  1.0000000      161
-## 2           22 GLKT0ZE01A1B65   species species 187101  0.8571653      152
-## 3            1 GLKT0ZE01A608I   species species  906_1  1.0000000      555
-##    ml_ratio  log_like    distal_bl   pendant_bl tax_id.1
-## 1 0.1428572 -11098.20 5.149085e-07 6.113515e-06    40543
-## 2 0.1428611 -11098.20 5.149085e-07 6.113515e-06   187101
-## 3 0.1428572 -11607.93 5.149085e-07 5.842901e-02    906_1
-##   map_identity_ratio map_identity_denom
-## 1                 NA                 NA
-## 2                 NA                 NA
-## 3                 NA                 NA</code></pre>
+<pre><code>##   placement_id           name want_rank    rank tax_id_multilcass
+## 1            1 GLKT0ZE01A608I   species species             906_1
+## 2            2 GLKT0ZE01EDYPL   species   genus             84111
+## 3            3 GLKT0ZE01AHXIQ   species species              2702
+##   likelihood location  ml_ratio  log_like    distal_bl   pendant_bl
+## 1          1      555 0.1428572 -11607.93 5.149085e-07 5.842901e-02
+## 2          1      111 0.1428571 -11011.07 5.149085e-07 6.113515e-06
+## 3          1       69 0.1428591 -11606.63 5.149085e-07 6.113515e-06
+##   tax_id_placement map_identity_ratio map_identity_denom
+## 1            906_1                 NA                 NA
+## 2            84111                 NA                 NA
+## 3             2702                 NA                 NA</code></pre>
 </div>
 <div id="to-a-contingency-matrix" class="section level2">
 <h2><span class="header-section-number">8.2</span> To a contingency matrix</h2>
-<p>The <code>pplace_to_matrix</code> produces a contingency table. Let say the first 50 sequences in the multiclass table correspond to sequence from “sample 1” and the following 50 correspond to “sample 2”, the function output a ocntingency table for these two samples. You can either have the taxonomic names (tax_name=TRUE, in the example) or keep the taxonomic ids (tax_name=FALSE).</p>
+<p>The <code>pplace_to_matrix</code> produces a contingency table. Let say the first 50 sequences in the multiclass table correspond to sequence from “sample 1” and the following 50 correspond to “sample 2”, the function output a contingency table for these two samples. You can either have the taxonomic names (tax_name=TRUE, in the example) or keep the taxonomic ids (tax_name=FALSE).</p>
 <pre class="r"><code>example_contingency &lt;- pplace_to_matrix(pplace,c(rep(&quot;sample1&quot;,50),rep(&quot;sample2&quot;,50)),tax_name=TRUE)
 example_contingency</code></pre>
-<pre><code>##         Sneathia sanguinegens Leptotrichia amnionii Megasphaera sp. type 1
-## sample1                    18                    10                      6
-## sample2                    14                    14                      5
+<pre><code>##         Sneathia sanguinegens Sneathia Megasphaera sp. type 1
+## sample1                    17       12                      6
+## sample2                    14       14                      5
 ##         Atopobium vaginae Gardnerella vaginalis Dialister sp. type 2
 ## sample1                 1                     2                    1
 ## sample2                 1                     3                    0
-##         Prevotella genogroup 1 Lactobacillus iners BVAB1
-## sample1                      3                   4     1
-## sample2                      5                   0     2
-##         Prevotella genogroup 2 Sneathia Prevotella genogroup 3
-## sample1                      1        2                      1
-## sample2                      0        0                      1
+##         Fusobacteriaceae Prevotella genogroup 1 Lactobacillus iners BVAB1
+## sample1                1                      3                   4     1
+## sample2                0                      5                   0     2
+##         Prevotella genogroup 2 Prevotella genogroup 3
+## sample1                      1                      1
+## sample2                      0                      1
 ##         Aerococcus christensenii Parvimonas micra Eggerthella
 ## sample1                        0                0           0
 ## sample2                        1                2           2</code></pre>
@@ -351,7 +381,7 @@ head(example_taxo)</code></pre>
 ## GLKT0ZE01AHXIQ &quot;Bifidobacteriales&quot; &quot;Bifidobacteriaceae&quot; &quot;Gardnerella&quot;
 ##                species                 
 ## GLKT0ZE01A0Y5X &quot;Sneathia sanguinegens&quot; 
-## GLKT0ZE01A1B65 &quot;Leptotrichia amnionii&quot; 
+## GLKT0ZE01A1B65 &quot;Unclassified&quot;          
 ## GLKT0ZE01A608I &quot;Megasphaera sp. type 1&quot;
 ## GLKT0ZE01A6F1M &quot;Sneathia sanguinegens&quot; 
 ## GLKT0ZE01AH4NR &quot;Atopobium vaginae&quot;     
@@ -363,12 +393,12 @@ head(example_taxo)</code></pre>
 <pre class="r"><code>example_OTU &lt;- matrix(sample(1:100, 500, replace = TRUE), nrow = 100, ncol = 5,dimnames=list(pplace$multiclass$name,paste(&quot;sample&quot;,1:5,sep=&quot;_&quot;)))
 head(example_OTU)</code></pre>
 <pre><code>##                sample_1 sample_2 sample_3 sample_4 sample_5
-## GLKT0ZE01A0Y5X       42       96       34       74       36
-## GLKT0ZE01A1B65       23        8       33       17       28
-## GLKT0ZE01A608I       43       49       77       75       15
-## GLKT0ZE01A6F1M       34       68       71        6       96
-## GLKT0ZE01AH4NR       62        2       21       62       29
-## GLKT0ZE01AHXIQ       77       96       20       92       85</code></pre>
+## GLKT0ZE01A0Y5X       25      100       51      100       75
+## GLKT0ZE01A1B65       78       93       87       78       32
+## GLKT0ZE01A608I       37       65       42       82       25
+## GLKT0ZE01A6F1M       24       48       35       28       23
+## GLKT0ZE01AH4NR       49       88       96        5        2
+## GLKT0ZE01AHXIQ       83       47       12       16       41</code></pre>
 <pre class="r"><code>library(phyloseq)
 example_phyloseq &lt;- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))
 example_phyloseq</code></pre>
@@ -385,7 +415,7 @@ example_phyloseq</code></pre>
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2017). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 2.3.
+##   Analysis. R package version 3.0.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -393,7 +423,7 @@ example_phyloseq</code></pre>
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2017},
-##     note = {R package version 2.3},
+##     note = {R package version 3.0},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from

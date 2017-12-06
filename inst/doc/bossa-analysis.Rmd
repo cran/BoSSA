@@ -21,11 +21,10 @@ Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
 
 # Summary
 
-Phylogenetic placements represents mapping of query sequences to a reference phylogenetic tree. Put it another way, it corresponds to the position in a tree where a query sequence fits. Different tools exits to infer phylogenetic placements with the [EPA](http://sco.h-its.org/exelixis/web/software/epa/index.html) algorithm and [pplacer](http://matsen.fhcrc.org/pplacer/). Importantly, both EPA and pplacer produces placements under a common [file format](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009). Placements can later be analysed using the [guppy](https://matsen.github.io/pplacer/generated_rst/guppy.html) software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide functional examples of placements analyses using BoSSA.
+Phylogenetic placements represents mapping of query sequences to a reference phylogenetic tree. Put it another way, it corresponds to the position in a tree where a query sequence fits. Different tools exits to infer phylogenetic placements, such as [pplacer](http://matsen.fhcrc.org/pplacer/) and [EPA](http://sco.h-its.org/exelixis/web/software/epa/index.html). Importantly, both pplacer and EPA produces placements under a common [file format](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009). Placements can later be analysed using the [guppy](https://matsen.github.io/pplacer/generated_rst/guppy.html) software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide functional examples of placements analyses using BoSSA.
 
-# Important notes
+# Important note
 
-- Whereas guppy offer the possibility to feed a sqlite database multiple time (i.e. perform multiple classification run the same sqlite output), the BoSSA package is designed to handle sqlite files obtained after a single classification run.
 - The reference packages shiped with BoSSA are incomplete (they lack the alignment file) in order to reduce the package size. Whereas, the information available is sufficient to draw summary statistics, it won't be enough to perform actual phylogenetic placement.
 
 # How to obtain phylogentic placement file suitable for analysis with BoSSA ?
@@ -39,7 +38,7 @@ Assuming you dispose of some query sequences (either full sequences,contigs or s
 Let's say you now dispose of a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). The example files presented here are derived from other [reference packages and jplaces files](github.com/fhcrc/microbiome-demo/zipball/master) from the [Matsen group pplacer tutorials](http://fhcrc.github.io/microbiome-demo/). The sqlite file was obtained using the following command:
 
 ```
-guppy classify --bayes-cutoff 0 --multiclass-min 0 --cutoff 0 -c example.refpkg --sqlite example.sqlite example.jplace
+guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
 ```
 
 # Exploration of a reference package
@@ -96,16 +95,17 @@ pplace <- read_sqlite(sqlite_file,jplace_file)
 pplace
 ```
 
-On screen a summary of the object is printed with the number of runs, the command line, the number of placements and the number of sequences being placed. Pplace objects are list with five components :
+On screen a summary of the object is printed with the number of runs, the command line, a short description of the phylogenetic tree, the number of placements and the number of sequences being placed. Pplace objects are list with 15 components, with 12 components being outputs from a [guppy classify](https://matsen.github.io/pplacer/generated_rst/guppy_classify.html#guppy-classify) run and the last three corresponding to the phylogenetic tree used for placement:
 
 ```{r }
 str(pplace)
 ```
 
+Among these:
 - the `run` element contains the run id and the command line summary
-- the `taxo` element is a data frame with the whole taxonomy available in the reference package 
+- the `taxa` element is a data frame with the whole taxonomy available in the reference package 
 - the `multiclass` element is a data frame with the taxonomic assignation of each placement
-- the `placement` element is a data frame with the position of each placement over the reference phylogenetic tree
+- the `placement_positions` element is a data frame with the position of each placement over the reference phylogenetic tree
 - the `arbre` element is the class `phylo` object of the reference phylogenetic tree
 
 # Some plots
@@ -166,7 +166,7 @@ head(pplace_table,n=3)
 
 ## To a contingency matrix
 
-The `pplace_to_matrix` produces a contingency table. Let say the first 50 sequences in the multiclass table correspond to sequence from "sample 1" and the following 50 correspond to "sample 2", the function output a ocntingency table for these two samples. You can either have the taxonomic names (tax_name=TRUE, in the example) or keep the taxonomic ids (tax_name=FALSE).
+The `pplace_to_matrix` produces a contingency table. Let say the first 50 sequences in the multiclass table correspond to sequence from "sample 1" and the following 50 correspond to "sample 2", the function output a contingency table for these two samples. You can either have the taxonomic names (tax_name=TRUE, in the example) or keep the taxonomic ids (tax_name=FALSE).
 
 ```{r}
 example_contingency <- pplace_to_matrix(pplace,c(rep("sample1",50),rep("sample2",50)),tax_name=TRUE)

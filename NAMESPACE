@@ -9,7 +9,8 @@ export("read_sqlite",
        "print.pplace",
        "print.jplace",
        "print.protdb",
-       "read_protdb"
+       "read_protdb",
+       "write_jplace"
        )
 import(ape)
 import(RSQLite)
@@ -21,6 +22,7 @@ importFrom("graphics", "axis", "image", "layout", "par", "plot",
              "plot.new", "points", "text")
 importFrom("stats", "aggregate")
 importFrom("grDevices", "rainbow")
+importFrom("grDevices", "col2rgb")
 importFrom("stats", "quantile")
 importFrom("utils", "read.csv")
 importFrom("utils", "write.table")

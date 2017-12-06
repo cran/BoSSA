@@ -5,15 +5,15 @@
 Subsets a pplace object
 }
 \description{
-Subsets a pplace object based on the placement_id, the name of the placement or a regular expression of the name of the placement
+Subsets a pplace or jplace object based on the placement_id, the name of the placement or a regular expression of the name of the placement
 }
 \usage{
-sub_pplace(pplace, placement_id = NULL, ech_id = NULL, ech_regexp = NULL)
+sub_pplace(x, placement_id = NULL, ech_id = NULL, ech_regexp = NULL, run_id = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{pplace}{
-The pplace object to subset
+  \item{x}{
+The pplace or jplace object to subset
 }
   \item{placement_id}{
 A vector of the placement_id to subset
@@ -23,6 +23,9 @@ A vector of the names of the placement to subset
 }
   \item{ech_regexp}{
 A regular expression of the name of the placement to subset
+}
+  \item{run_id}{
+A vector of run_id to subset
 }
 }
 \details{

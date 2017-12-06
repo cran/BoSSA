@@ -67,7 +67,7 @@ r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refs
 r_search$count
 ```
 
-To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to 217.
+To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to 218.
 
 ```{r }
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",retmax=500)

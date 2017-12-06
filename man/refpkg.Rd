@@ -20,7 +20,7 @@ out_krona="for_krona.txt",text2krona=NULL)
 The path of the reference package directory
 }
   \item{type}{
-The type of summary to perform with "summary", "taxonomy", "tree", "pie" or "krona" available.
+The type of summary to perform with "summary", "taxonomy", "info", "tree", "pie" or "krona" available.
 }
   \item{rank_tree}{
 The desired rank for tree coloring
@@ -32,7 +32,7 @@ The ranks to be plot for the taxonomy pie chart
 Wether or not to take into account the number of sequences available within the reference package for the pie chart
 }
   \item{alpha_order}{
-Wether or not to color should follows taxa alpahabetic order when type set to "tree"
+Wether or not the color should follow taxa alpahabetic order when type set to "tree"
 }
   \item{cex.text}{
 The tip labels cex parameter when type is set to "tree" and the text cex parameter when type is set to "pie"
@@ -47,15 +47,18 @@ Add a scale bar on the tree
 Rotates the pie slice labels
 }
   \item{out_krona}{
-Teh name of the output when type is set to "krona".
+The name of the output file when type is set to "krona".
 }
   \item{text2krona}{
-The full path to  the krona "ImportText.pl" script when KronaTools is installed and you want to produce the html krona file.
+The full path to the krona "ImportText.pl" script when KronaTools is installed and you wish to directly produce the html krona file.
 }
 
 }
 \value{
-A summary print on screen when tupe set to "summary". A data frame when type set to "taxonomy". A plot otherwise.
+A summary print on screen when type set to "summary".
+A data frame when type set to "taxonomy" or "info".
+A file written to the disk when type is set to "krona".
+A plot otherwise.
 }
 \references{
 https://github.com/marbl/Krona/wiki/KronaTools
@@ -74,6 +77,9 @@ refpkg(refpkg_path)
 ### taxonomy
 taxonomy <- refpkg(refpkg_path,type="taxonomy")
 head(taxonomy)
+
+### info
+refpkg(refpkg_path,type="info")
 
 ### tree
 refpkg(refpkg_path,type="tree",rank_tree="order",cex.text=0.5)

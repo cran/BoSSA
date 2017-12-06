@@ -8,7 +8,7 @@ Merge the multiclass and the placement table of pplace object
 Merge the multiclass and the placement table of pplace object
 }
 \usage{
-pplace_to_table(pplace, type = "full")
+pplace_to_table(pplace, type = "full",run_id=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,9 @@ a pplace object
 }
   \item{type}{
 the placement type to consider
+}
+  \item{run_id}{
+A vector of run_id to subset
 }
 }
 \details{
