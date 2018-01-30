@@ -1,7 +1,9 @@
 ---
 title: "Example of placement analysis using BoSSA"
-output: 
-  BiocStyle::html_document
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
 vignette: >
   %\VignetteIndexEntry{Example of placement analysis using BoSSA}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,7 +14,6 @@ vignette: >
 -->
 
 ```{r style, echo = FALSE, results = 'asis'}
-BiocStyle::markdown()
 ```
 
 Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
@@ -26,6 +27,7 @@ Phylogenetic placements represents mapping of query sequences to a reference phy
 # Important note
 
 - The reference packages shiped with BoSSA are incomplete (they lack the alignment file) in order to reduce the package size. Whereas, the information available is sufficient to draw summary statistics, it won't be enough to perform actual phylogenetic placement.
+- When the jplace or sqlite files are import into R, the node numbering available in the original file is converted to the class "phylo" numbering.
 
 # How to obtain phylogentic placement file suitable for analysis with BoSSA ?
 
@@ -155,7 +157,7 @@ sub2
 
 # Conversion
 
-## To a table
+### To a table
 
 Using the `pplace_to_table` function produces a table taht contains the placement information along with the classification for each sequence. The output can be limited to the "best" placement (as in the example, i.e. the placements with the highest likelihood for each sequence).
 
@@ -164,7 +166,7 @@ pplace_table <- pplace_to_table(pplace,type="best")
 head(pplace_table,n=3)
 ```
 
-## To a contingency matrix
+### To a contingency matrix
 
 The `pplace_to_matrix` produces a contingency table. Let say the first 50 sequences in the multiclass table correspond to sequence from "sample 1" and the following 50 correspond to "sample 2", the function output a contingency table for these two samples. You can either have the taxonomic names (tax_name=TRUE, in the example) or keep the taxonomic ids (tax_name=FALSE).
 
@@ -173,7 +175,7 @@ example_contingency <- pplace_to_matrix(pplace,c(rep("sample1",50),rep("sample2"
 example_contingency
 ```
 
-## To a taxonomy
+### To a taxonomy
 
 Using the `pplace_to_taxonomy` function, a taxonomy table is compiled for each sequences with the taxonomy levels defined in the reference package. The taxonomy levels can be limited to a set of levels using the `rank` option.
 
@@ -182,7 +184,7 @@ example_taxo <- pplace_to_taxonomy(pplace,taxo,tax_name=TRUE,rank=c("order","fam
 head(example_taxo)
 ```
 
-## Make a phyloseq object
+### Make a phyloseq object
 
 Assuming the sequences in the pplace object represent centroids of sequence cluster you obtained from multiple samples, using the taxonomy table and an appropriate OTU file, you can create a phyloseq object.
 
@@ -207,14 +209,14 @@ citation("BoSSA")
 
 # Other resources
 
-## On phylogenetic placements
+### On phylogenetic placements
 [pplacer website](http://matsen.fhcrc.org/pplacer/) and [documentation](http://matsen.github.io/pplacer/)
 
 [taxtastic](https://github.com/fhcrc/taxtastic)
 
-## Other R package with a related topic
+### Other R package with a related topic
 [ggtree](https://bioconductor.org/packages/release/bioc/html/ggtree.html) and [clstutils](https://bioconductor.org/packages/release/bioc/html/clstutils.html)
 
-## R packages used by BoSSA
+### R packages used by BoSSA
 [RSQLite](https://cran.r-project.org/package=RSQLite) and [jsonlite](https://cran.r-project.org/package=jsonlite) to read files, [ape](https://cran.r-project.org/package=ape) and [phangorn](https://cran.r-project.org/package=phangorn) to manipulate phylogenetic trees and [plotrix](https://cran.r-project.org/package=plotrix) for pie charts.
 

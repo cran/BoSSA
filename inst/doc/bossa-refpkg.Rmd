@@ -1,7 +1,9 @@
 ---
 title: "Reference package construction from scratch"
-output: 
-  BiocStyle::html_document
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
 vignette: >
   %\VignetteIndexEntry{Reference package construction from scratch}
   %\VignetteEngine{knitr::rmarkdown}
@@ -12,7 +14,6 @@ vignette: >
 -->
 
 ```{r style, echo = FALSE, results = 'asis'}
-BiocStyle::markdown()
 ```
 
 Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
@@ -33,7 +34,7 @@ Imagine you obtained some viral contigs that using BLAST (or some related simila
 
 A search on the [ICTV website](https://talk.ictvonline.org/ictv-reports/ictv_9th_report/positive-sense-rna-viruses-2011/w/posrna_viruses/265/luteoviridae) informs us that polerovirus belongs to the Luteovidiae family and that their "genome size is fairly uniform ranging from 5.6 kb to 6.0 kb".
 
-## Loading the required packages
+### Loading the required packages
 
 We will use the [rentrez package](https://cran.r-project.org/package=rentrez) to query NCBI from R. Along with a vignette available at the [rentrez CRAN webpage](https://cran.r-project.org/package=rentrez), examples of rentrez use are available [here](https://ropensci.org/tutorials/rentrez_tutorial.html).
 
@@ -44,7 +45,7 @@ library("ape")
 library("BoSSA")
 ```
 
-## How many polerovirus sequences are available on NCBI ?
+### How many polerovirus sequences are available on NCBI ?
 
 We first search for the taxonomic id associated to the *Polerovirus* genus in NCBI...
 
@@ -75,9 +76,9 @@ gi <- r_search$ids
 gi[1:10]
 ```
 
-## Download all these sequences
+### Download all these sequences
 
-### Get the genbank informations in XML format
+#### Get the genbank informations in XML format
 
 We now use these gi to download the information relative to the sequences in XML format. XML is a handy format as it allow to directly extract specific fields form the genbank file.
 
@@ -86,7 +87,7 @@ all_recs <- entrez_fetch(db="nuccore", id=gi, rettype="gbc",retmode="xml",parsed
 rec_list <- xmlToList(all_recs)
 ```
 
-### For a large set of sequences
+#### For a large set of sequences
 
 Alternatively, when the number of sequence to recover is large (>500), you can use the use history option and fetch the sequence 500 by 500.
 
@@ -97,7 +98,7 @@ for(seq_start in seq(1,ceiling(r_search$count/500)*500,500)){
      all_recs <- c(all_recs,entrez_fetch(db="nuccore", web_history=r_search$web_history,rettype="gb",retmax=500,retstart=seq_start))
 }
 ```
-### Extract the fasta from the XML
+#### Extract the fasta from the XML
 
 We now extract the sequences and write a fasta formated file on the disk.
 
@@ -105,7 +106,7 @@ We now extract the sequences and write a fasta formated file on the disk.
 write(sapply(rec_list,function(X){paste(">",X$INSDSeq_locus,"\n",X$INSDSeq_sequence,sep="")}),"polerovirus_from_genbank.fasta")
 ```
 
-### Extract the taxonomy from the XML
+#### Extract the taxonomy from the XML
 
 Also, we need to extract the polerovirus classification of each sequence.
 
@@ -148,7 +149,7 @@ write.tree(root_tree,"polerovirus_ROOTED.tre")
 
 # The Taxonomy
 
-## Download the polerovirus taxonomy IDs
+### Download the polerovirus taxonomy IDs
 
 We need to compile the complete taxonomy information for the polerovirus. Taxastic has a function for that. We first download the full taxonomy from NCBI using taxit and subset it for the poleroviruses.
 
@@ -163,7 +164,7 @@ taxit new_database -d taxonomy.db
 taxit taxtable -d taxonomy.db -t taxonomy_polerovirus.id -o polerovirus_taxonomy.csv
 ```
 
-## The information file
+### The information file
 
 We can now create and write the information file for the sequences from our phylogenetic tree.
 
@@ -187,7 +188,7 @@ taxit create -l polerovirus -P polerovirus.refpkg \
    	--tree-file polerovirus_ROOTED.tre --no-reroot
 ```
 
-## Check the refpkg using rppr
+### Check the refpkg using rppr
 
 Rppr offers the possibility to check the reference package using the following commands.
 
@@ -196,7 +197,7 @@ rppr check -c polerovirus.refpkg
 rppr info -c polerovirus.refpk
 ```
 
-## Refpkg stats using BoSSA
+### Refpkg stats using BoSSA
 
 Using BoSSA, we can extract some summary statistics and draw some plots.
 
@@ -278,17 +279,17 @@ citation("BoSSA")
 
 # Other resources
 
-## On phylogenetic placements
+### On phylogenetic placements
 [pplacer website](http://matsen.fhcrc.org/pplacer/) and [documentation](http://matsen.github.io/pplacer/)
 
 [taxtastic](https://github.com/fhcrc/taxtastic)
 
-## Other R package with a related topic
+### Other R package with a related topic
 [ggtree](https://bioconductor.org/packages/release/bioc/html/ggtree.html) and [clstutils](https://bioconductor.org/packages/release/bioc/html/clstutils.html)
 
-## On krona charts
+### On krona charts
 [krona](https://github.com/marbl/Krona/wiki/KronaTools)
 
-## R packages used by BoSSA
+### R packages used by BoSSA
 [RSQLite](https://cran.r-project.org/package=RSQLite) and [jsonlite](https://cran.r-project.org/package=jsonlite) to read files, [ape](https://cran.r-project.org/package=ape) and [phangorn](https://cran.r-project.org/package=phangorn) to manipulate phylogenetic trees and [plotrix](https://cran.r-project.org/package=plotrix) for pie charts.
 

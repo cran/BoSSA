@@ -17,6 +17,10 @@ A jplace file name
 If set to FALSE, only the tree is read from the jplace file
 }
 }
+\details{
+When the jplace or sqlite files are import into R, the node numbering available in the original
+file is converted to the class "phylo" numbering.
+}
 \value{
 A list with
 \item{arbre}{The tree in class "phylo" over wich placements are performed}

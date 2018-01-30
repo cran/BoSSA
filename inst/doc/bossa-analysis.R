@@ -1,5 +1,4 @@
 ## ----style, echo = FALSE, results = 'asis'-------------------------------
-BiocStyle::markdown()
 
 ## ----load-packages, message=FALSE, warning=FALSE-------------------------
 library("BoSSA")

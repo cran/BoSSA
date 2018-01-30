@@ -24,6 +24,8 @@ The desired taxonomic assignation rank to extract
 }
 \details{
 As the tree informations are not available in the sqlite file, the jplace file is also required.
+When the jplace or sqlite files are import into R, the node numbering available in the original
+file is converted to the class "phylo" numbering.
 }
 \value{
 A list with
