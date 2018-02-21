@@ -69,9 +69,9 @@ example_OTU <- matrix(sample(1:100, 500, replace = TRUE), nrow = 100, ncol = 5,d
 head(example_OTU)
 
 ## ------------------------------------------------------------------------
-library(phyloseq)
-example_phyloseq <- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))
-example_phyloseq
+#library(phyloseq)
+#example_phyloseq <- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))
+#example_phyloseq
 
 ## ------------------------------------------------------------------------
 citation("BoSSA")

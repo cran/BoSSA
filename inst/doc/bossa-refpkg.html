@@ -107,17 +107,17 @@ r_search<span class="op">$</span>ids</code></pre></div>
 <p>… and use this id (119164) to query the nucleotide database. Note that we remove the reference sequence set from the search (using “NOT srcdb_refseq[PROP]”) as these are duplicates from records already available in the nucleotide database.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_search &lt;-<span class="st"> </span><span class="kw">entrez_search</span>(<span class="dt">db=</span><span class="st">&quot;nucleotide&quot;</span>, <span class="dt">term=</span><span class="st">&quot;txid119164[orgn] NOT srcdb_refseq[PROP]&quot;</span>)
 r_search<span class="op">$</span>count</code></pre></div>
-<pre><code>## [1] 2063</code></pre>
+<pre><code>## [1] 2080</code></pre>
 <p>This number represents the total number of sequences from the genus polerovirus. We will now search for full genomes using the “AND 5000:6500[slen]” query.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_search &lt;-<span class="st"> </span><span class="kw">entrez_search</span>(<span class="dt">db=</span><span class="st">&quot;nucleotide&quot;</span>, <span class="dt">term=</span><span class="st">&quot;txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]&quot;</span>)
 r_search<span class="op">$</span>count</code></pre></div>
-<pre><code>## [1] 233</code></pre>
+<pre><code>## [1] 234</code></pre>
 <p>To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to 218.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_search &lt;-<span class="st"> </span><span class="kw">entrez_search</span>(<span class="dt">db=</span><span class="st">&quot;nucleotide&quot;</span>, <span class="dt">term=</span><span class="st">&quot;txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]&quot;</span>,<span class="dt">retmax=</span><span class="dv">500</span>)
 gi &lt;-<span class="st"> </span>r_search<span class="op">$</span>ids
 gi[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</code></pre></div>
-<pre><code>##  [1] &quot;1153684428&quot; &quot;1316131152&quot; &quot;1316131147&quot; &quot;1316131143&quot; &quot;1316131139&quot;
-##  [6] &quot;1316131135&quot; &quot;1316131123&quot; &quot;1316131119&quot; &quot;1316131115&quot; &quot;1316131107&quot;</code></pre>
+<pre><code>##  [1] &quot;1336603068&quot; &quot;1153684428&quot; &quot;1316131152&quot; &quot;1316131147&quot; &quot;1316131143&quot;
+##  [6] &quot;1316131139&quot; &quot;1316131135&quot; &quot;1316131123&quot; &quot;1316131119&quot; &quot;1316131115&quot;</code></pre>
 </div>
 <div id="download-all-these-sequences" class="section level3">
 <h3>Download all these sequences</h3>
@@ -213,7 +213,7 @@ rppr info -c polerovirus.refpk</code></pre>
 <span class="kw">refpkg</span>(refpkg_path)</code></pre></div>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/RtmpuSwo8m/Rinst269fa345d6c/BoSSA/extdata/polerovirus.refpkg
+## Path:/tmp/Rtmp5Y4KHi/Rinst3b27226cc47a/BoSSA/extdata/polerovirus.refpkg
 ## 
 ## Tree with 204 tips 203 nodes
 ## 
@@ -281,7 +281,7 @@ to_remove &lt;-<span class="st"> </span>root_tree<span class="op">$</span>tip.la
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2018). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 3.1.
+##   Analysis. R package version 3.2.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -289,7 +289,7 @@ to_remove &lt;-<span class="st"> </span>root_tree<span class="op">$</span>tip.la
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2018},
-##     note = {R package version 3.1},
+##     note = {R package version 3.2},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from

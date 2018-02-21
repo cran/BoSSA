@@ -109,7 +109,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">refpkg</span>(refpkg_path)</code></pre></div>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/RtmpuSwo8m/Rinst269fa345d6c/BoSSA/extdata/example.refpkg
+## Path:/tmp/Rtmp5Y4KHi/Rinst3b27226cc47a/BoSSA/extdata/example.refpkg
 ## 
 ## Tree with 652 tips 650 nodes
 ## 
@@ -309,8 +309,8 @@ sub2</code></pre></div>
 ## run: 1
 ## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
 ## Placement on a phylogenetic tree with 652 tips and 650 internal nodes.
-## sequence nb: 50
-## placement nb: 20</code></pre>
+## sequence nb: 84
+## placement nb: 17</code></pre>
 </div>
 <div id="conversion" class="section level1">
 <h1>Conversion</h1>
@@ -375,22 +375,20 @@ example_contingency</code></pre></div>
 </div>
 <div id="make-a-phyloseq-object" class="section level3">
 <h3>Make a phyloseq object</h3>
-<p>Assuming the sequences in the pplace object represent centroids of sequence cluster you obtained from multiple samples, using the taxonomy table and an appropriate OTU file, you can create a phyloseq object.</p>
+<p>Assuming the sequences in the pplace object represent centroids of sequence cluster obtained from multiple samples, using the taxonomy table and an appropriate OTU file, you can create a phyloseq object.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">example_OTU &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">500</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">5</span>,<span class="dt">dimnames=</span><span class="kw">list</span>(pplace<span class="op">$</span>multiclass<span class="op">$</span>name,<span class="kw">paste</span>(<span class="st">&quot;sample&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dt">sep=</span><span class="st">&quot;_&quot;</span>)))
 <span class="kw">head</span>(example_OTU)</code></pre></div>
 <pre><code>##                sample_1 sample_2 sample_3 sample_4 sample_5
-## GLKT0ZE01A0Y5X       13       81       57       53       46
-## GLKT0ZE01A1B65       22       18       25       48       38
-## GLKT0ZE01A608I        5       58       82       66       38
-## GLKT0ZE01A6F1M       42       16       62       19       40
-## GLKT0ZE01AH4NR       79       37      100       41       20
-## GLKT0ZE01AHXIQ       91       20       76       91       35</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(phyloseq)
-example_phyloseq &lt;-<span class="st"> </span><span class="kw">phyloseq</span>(<span class="kw">otu_table</span>(example_OTU,<span class="dt">taxa_are_rows=</span><span class="ot">TRUE</span>),<span class="kw">tax_table</span>(example_taxo))
-example_phyloseq</code></pre></div>
-<pre><code>## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 100 taxa and 5 samples ]
-## tax_table()   Taxonomy Table:    [ 100 taxa by 4 taxonomic ranks ]</code></pre>
+## GLKT0ZE01A0Y5X       40       59       67        9       28
+## GLKT0ZE01A1B65        7       48       58       35       27
+## GLKT0ZE01A608I       34       81       96        8       16
+## GLKT0ZE01A6F1M       11       12       30       77       55
+## GLKT0ZE01AH4NR       70       73       46       11       99
+## GLKT0ZE01AHXIQ       12       71        3       82      100</code></pre>
+<p>The exemple below is not run (commented) due to errors/warnings triggered by the used of Bioconductor packages (i.e. phyloseq) in CRAN vignette on some platform. Just uncomment the code if you like to have a try.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#library(phyloseq)</span>
+<span class="co">#example_phyloseq &lt;- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))</span>
+<span class="co">#example_phyloseq</span></code></pre></div>
 </div>
 </div>
 <div id="citation" class="section level1">
@@ -401,7 +399,7 @@ example_phyloseq</code></pre></div>
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2018). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 3.1.
+##   Analysis. R package version 3.2.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -409,7 +407,7 @@ example_phyloseq</code></pre></div>
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2018},
-##     note = {R package version 3.1},
+##     note = {R package version 3.2},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from

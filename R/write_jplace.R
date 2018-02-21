@@ -18,13 +18,6 @@ write_jplace <- function(x,outfile){
       }
     }    
     write("{\"tree\":",outfile)
-#     arbre2 <- x$arbre
-#     arbre2$edge.length <- 1:length(arbre2$edge.length)
-#     tree_string <- write.tree(arbre2,digits=10)
-#     for(i in 1:length(x$arbre$edge.length)){
-#       tree_string <- sub(paste(":",i,",",sep=""),paste(":",x$arbre$edge.length[i],"{",i,"},",sep=""),tree_string)
-#       tree_string <- sub(paste(":",i,")",sep=""),paste(":",x$arbre$edge.length[i],"{",i,"})",sep=""),tree_string)
-#     }
     tree_string <- x$original_tree
     write(paste("\"",tree_string,"\",",sep=""),outfile,append=TRUE)
     write("\"placements\":\n\t[",outfile,append=TRUE)

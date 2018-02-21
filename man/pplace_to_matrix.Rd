@@ -8,7 +8,8 @@ Pplace to contingency matrix
 Convert the pplace object into a contingency matrix OTUs / sample
 }
 \usage{
-pplace_to_matrix(pplace, sample_info, N = NULL, tax_name = FALSE,run_id=NULL)
+pplace_to_matrix(pplace, sample_info, N = NULL, tax_name = FALSE
+				 ,run_id=NULL,round_type=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -27,6 +28,11 @@ Either the tax ids (default) or the tax names are used as column names. The tax 
   \item{run_id}{
 A vector of run_id to subset
 }
+  \item{round_type}{
+The name of the rounding fonction to apply to the product of the number of individuals classified in a given category and the likelihood ratio of this classification.
+Should be set to NULL (no rounding) or one of "trunc", "round", "ceiling" or "floor".
+}
+
 }
 \value{
 A contingency matrix with OTUs / species in rows and samples in columns.

@@ -1,27 +1,36 @@
 sub_pplace <-
 function(x,placement_id=NULL,ech_id=NULL,ech_regexp=NULL,run_id=NULL){
-  if(!is.null(placement_id)){
-    x$multiclass <- x$multiclass[x$multiclass$placement_id%in%placement_id,]
-    x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%placement_id,]
+  if(sum(!is.null(placement_id),!is.null(ech_id),!is.null(ech_regexp),!is.null(run_id))>1) stop("Subset can only be performed using a single criterion a time e.g. ech_id or run_id not both in the same call")
+  if(class(x)=="jplace"){
+    if(!is.null(placement_id)){
+      x$multiclass <- x$multiclass[x$multiclass$placement_id%in%placement_id,]
+      x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%placement_id,]
+    }
+    if(!is.null(ech_id)){
+      x$multiclass <- x$multiclass[x$multiclass$name%in%ech_id,]
+      x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%x$multiclass$placement_id,]
+    }
+    if(!is.null(ech_regexp)){
+      x$multiclass <- x$multiclass[grep(ech_regexp,x$multiclass$name),]
+      x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%x$multiclass$placement_id,]
+    }
   }
-  if(!is.null(ech_id)){
-    x$multiclass <- x$multiclass[x$multiclass$name%in%ech_id,]
-    x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%x$multiclass$placement_id,]
-  }
-  if(!is.null(ech_regexp)){
-    x$multiclass <- x$multiclass[grep(ech_regexp,x$multiclass$name),]
-    x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%x$multiclass$placement_id,]
-  }
-  if(!is.null(run_id)){
-    pid <- x$placements$placement_id[x$placements$run_id%in%run_id]
-    x$multiclass <- x$multiclass[x$multiclass[,1]%in%pid,]
-    x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%x$multiclass$placement_id,]
-  }
-  if(class(x)=="pplace"){
+  if(class(x)=="pplace"){  
     if(!is.null(run_id)){
+      pid <- x$placements$placement_id[x$placements$run_id%in%run_id]
       x$run <- x$run[x$run$run_id%in%run_id,]
     }
-    pid <- unique(x$placement_positions$placement_id)
+    if(!is.null(placement_id)){
+      pid <- unique(placement_id)
+    }
+    if(!is.null(ech_id)){
+      pid <- unique(x$placement_names$placement_id[x$placement_names$name%in%ech_id])
+    }
+    if(!is.null(ech_regexp)){
+      pid <- unique(x$placement_names$placement_id[grep(ech_regexp,x$placement_names$name)])
+    }
+    x$multiclass <- x$multiclass[x$multiclass[,1]%in%pid,]
+    x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%pid,]
     x$placement_classifications <- x$placement_classifications[x$placement_classifications$placement_id%in%pid,]
     x$placement_evidence <- x$placement_evidence[x$placement_evidence$placement_id%in%pid,]
     x$placement_names <- x$placement_names[x$placement_names$placement_id%in%pid,]

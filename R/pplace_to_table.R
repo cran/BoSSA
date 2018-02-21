@@ -14,10 +14,10 @@ function(pplace,type="full",run_id=NULL){
 	out <- out[order(out$ml_ratio,decreasing=TRUE),]
 	out <- out[match(unique(out$placement_id),out[,1]),]
       }
+      out <- out[order(out$placement_id),]
+      rownames(out) <- NULL
+      colnames(out)[c(5,12)] <- c("tax_id_multilcass","tax_id_placement")
     }
-    out <- out[order(out$placement_id),]
-    rownames(out) <- NULL
-    colnames(out)[c(5,12)] <- c("tax_id_multilcass","tax_id_placement")
     return(out)
   }
 }

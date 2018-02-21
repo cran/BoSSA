@@ -2,7 +2,8 @@ read_sqlite <-
 function(sqlite_file,jplace_file=gsub("sqlite","jplace",sqlite_file),rank="species"){
   out <- list()
   db <- dbConnect(SQLite(),dbname=sqlite_file)
-  out$multiclass <- dbGetQuery(db,paste("select * from multiclass where want_rank=\'",rank,"\'",sep=""))
+  if(is.null(rank)) out$multiclass <- dbGetQuery(db,"select * from multiclass") 
+  if(!is.null(rank)) out$multiclass <- dbGetQuery(db,paste0("select * from multiclass where want_rank=\'",rank,"\'"))
   out$placement_classifications <- dbGetQuery(db,"select * from placement_classifications")
   out$placement_evidence <- dbGetQuery(db,"select * from placement_evidence")
   out$placement_median_identities <- dbGetQuery(db,"select * from placement_median_identities")
@@ -21,7 +22,6 @@ function(sqlite_file,jplace_file=gsub("sqlite","jplace",sqlite_file),rank="speci
     pplacer_branch_id <- out$placement_positions$location
     out$placement_positions$location <- out$edge_key[1,match(pplacer_branch_id,out$edge_key[2,])]
   }
-  #out$edge_key <- NULL
   class(out) <- "pplace"
   out  
 }

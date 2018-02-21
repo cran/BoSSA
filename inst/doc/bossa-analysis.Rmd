@@ -186,17 +186,18 @@ head(example_taxo)
 
 ### Make a phyloseq object
 
-Assuming the sequences in the pplace object represent centroids of sequence cluster you obtained from multiple samples, using the taxonomy table and an appropriate OTU file, you can create a phyloseq object.
+Assuming the sequences in the pplace object represent centroids of sequence cluster obtained from multiple samples, using the taxonomy table and an appropriate OTU file, you can create a phyloseq object.
 
 ```{r}
 example_OTU <- matrix(sample(1:100, 500, replace = TRUE), nrow = 100, ncol = 5,dimnames=list(pplace$multiclass$name,paste("sample",1:5,sep="_")))
 head(example_OTU)
 ```
+The exemple below is not run (commented) due to errors/warnings triggered by the used of Bioconductor packages (i.e. phyloseq) in CRAN vignette on some platform. Just uncomment the code if you like to have a try.
 
 ```{r}
-library(phyloseq)
-example_phyloseq <- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))
-example_phyloseq
+#library(phyloseq)
+#example_phyloseq <- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))
+#example_phyloseq
 ```
 
 # Citation
