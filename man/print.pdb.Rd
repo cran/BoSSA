@@ -5,7 +5,7 @@
 Compact display of protdb object
 }
 \description{
-Function to print the header section of the protdb object on the console.
+Function to print the header section of the protdb object.
 }
 \usage{
 \method{print}{protdb}(x, ...)

@@ -18,8 +18,8 @@ If set to FALSE, only the tree is read from the jplace file
 }
 }
 \details{
-When the jplace or sqlite files are import into R, the node numbering available in the original
-file is converted to the class "phylo" numbering.
+When the jplace or sqlite files are imported into R, the node numbering available in the original
+file is converted to the class "phylo" numbering. The class phylo is defined in the "ape" package.
 }
 \value{
 A list with

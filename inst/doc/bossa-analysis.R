@@ -37,6 +37,9 @@ plot(pplace,type="number",main="number",cex.number=1.5)
 ## ----test2, fig.width=9,fig.height=9-------------------------------------
 plot(pplace,type="color",main="color",edge.width=2)
 
+## ----testfat, fig.width=9,fig.height=9-----------------------------------
+plot(pplace,type="fattree",main="fattree")
+
 ## ----test3, fig.width=9,fig.height=9-------------------------------------
 plot(pplace,type="precise",main="precise")
 

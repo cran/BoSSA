@@ -20,7 +20,7 @@ out_krona="for_krona.txt",text2krona=NULL)
 The path of the reference package directory
 }
   \item{type}{
-The type of summary to perform with "summary", "taxonomy", "info", "tree", "pie" or "krona" available.
+The type of summary to perform with "summary", "taxonomy", "info", "tree", "pie" or "krona" available
 }
   \item{rank_tree}{
 The desired rank for tree coloring

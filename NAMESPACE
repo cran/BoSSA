@@ -6,6 +6,7 @@ export("read_sqlite",
        "sub_pplace",
        "refpkg",
        "plot.pplace",
+       "plot.jplace",
        "print.pplace",
        "print.jplace",
        "print.protdb",
@@ -30,7 +31,5 @@ S3method(print,protdb)
 S3method(print,pplace)
 S3method(print,jplace)
 S3method(plot,pplace)
-
-
-
+S3method(plot,jplace)
 

@@ -1,5 +1,5 @@
 read_sqlite <-
-function(sqlite_file,jplace_file=gsub("sqlite","jplace",sqlite_file),rank="species"){
+function(sqlite_file,jplace_file=gsub("sqlite$","jplace",sqlite_file),rank="species"){
   out <- list()
   db <- dbConnect(SQLite(),dbname=sqlite_file)
   if(is.null(rank)) out$multiclass <- dbGetQuery(db,"select * from multiclass") 

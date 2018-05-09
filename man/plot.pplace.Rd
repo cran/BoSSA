@@ -29,10 +29,10 @@ If set to TRUE, only plot the best position for each placement. default is FALSE
 An optionnal title to plot along the tree
 }
   \item{N}{
-An optionnal vector with a number of occurence associated to each placed sequence
+An optionnal vector of the weight of each placement. Must be of the same length and order as placements in the multiclass table.
 }
   \item{transfo}{
-An optionnal function to transform the placement size when type set to "precise". Beware that it is also applied to the legend text so that it does not anymore correspond to the placement size but to the transform dot size
+An optionnal function to transform the placement size when type set to "precise". Beware that it is also applied to the legend so that it does not anymore correspond to the placement size but to the transform dot size
 }
   \item{legend}{
 Plot a legend. Not available for type "number" or "fattree"
@@ -50,16 +50,16 @@ The tree edge width
 The maximum edge width when type is set to "fattree"
 }
   \item{cex.number}{
-Control the size of the number when type is set to "number"
+Control the size of the text when type is set to "number"
 }
   \item{cex.text}{
 Control the size of the main
 }
   \item{transp}{
-Control the transparency of the placement when type is "precise" and the transparency of the branch without assignment when type is set to "color"
+Control the transparency of the placement when type is "precise" and the transparency of the branch without placement when type is set to "color". Encoded in hexadecimal scale (i.e. range from "00" to "FF")
 }
   \item{add}{
-Add placement to an existing plot when type is set to precise. default is FALSE
+Add placement to an existing plot when type is set to precise. Default is FALSE. If it was drawn, the legend won't be updated. Beware to use the same value for the "transfo" option in each plot. Dots color scale won't be accurate when using the "add" option. It is highly recommanded to use a single color.
 }
   \item{color}{
 The colors used for pendant branch length scale when type is set to "precise". Default is a color ramp with "blue", "green", "yellow" and "red"

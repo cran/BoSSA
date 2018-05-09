@@ -12,9 +12,7 @@
 The DESCRIPTION file:
 \packageDESCRIPTION{BoSSA}
 \packageIndices{BoSSA}
-BoSSA offers functions to read and plot phylogenetic placement files obtained using pplacer and guppy. It works using the sqlite output from guppy. Placements can be plotted in different fashion.
-Previously BoSSA integrate NCBI BLAST fonctions and access to NCBI CGI through R.
-All these functions have been removed. For BLAST, a good alternative is to use biopython. Although it's not R, the biopython cookbook gives really good exemples making it quite easy to use. For access to the NCBI CGI, other packages such as "rentrez" or "reutils" are really well done and very handy.
+BoSSA contains functions to read and plot phylogenetic placement files obtained using softwares such as pplacer, guppy, EPA and RAPPAS.
 }
 \author{
 \packageAuthor{BoSSA}
@@ -24,7 +22,10 @@ Maintainer: \packageMaintainer{BoSSA}
 - pplacer and guppy
 http://matsen.fhcrc.org/pplacer/
 http://matsen.github.io/pplacer/
-
-- protein data bank
-http://www.rcsb.org/pdb/home/home.do
+- EPA
+https://sco.h-its.org/exelixis/web/software/epa/index.html
+- RAPPAS
+https://gite.lirmm.fr/linard/RAPPAS
+- Common file format
+http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009
 }

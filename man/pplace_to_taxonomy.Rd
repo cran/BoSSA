@@ -10,7 +10,7 @@ Convert a pplace object to a taxonomy table
 \usage{
 pplace_to_taxonomy(pplace,taxonomy,
 rank=c("phylum","class","order","family","genus","species"),
-tax_name=TRUE,run_id=NULL)
+type="all",tax_name=TRUE,run_id=NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,6 +22,9 @@ The taxonomy table as obtained using the refseq fonction with type set to taxono
 }
   \item{rank}{
 The desired rank for the taxonomy table
+}
+  \item{type}{
+Wether all the possible classification available in the multiclass table are outputed (type="all") or only the best (type="best")
 }
   \item{tax_name}{
 Wether to use taxonomy names (default) or tax_id number

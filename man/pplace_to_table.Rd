@@ -23,10 +23,10 @@ A vector of run_id to subset
 }
 }
 \details{
-For the type argument, either "full" or "best" are accepted. Whereas for the "full" type, all the placements are considered, only the best placement for each placed sequence is considered for the "best" type.
+For the type argument, either "full" or "best" are accepted. Whereas for the "full" type, all the placements are considered, only the best placement for each sequence is considered for the "best" type.
 }
 \value{
-a data frame with the same colomn names as the mutliclass and placements tables
+a data frame with the same column names as the mutliclass and placements tables
 }
 \author{
 pierre lefeuvre

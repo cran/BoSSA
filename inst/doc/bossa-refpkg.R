@@ -19,20 +19,17 @@ r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refs
 r_search$count
 
 ## ------------------------------------------------------------------------
-r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",retmax=500)
+r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",retmax=1000)
 gi <- r_search$ids
 gi[1:10]
 
 ## ------------------------------------------------------------------------
-all_recs <- entrez_fetch(db="nuccore", id=gi, rettype="gbc",retmode="xml",parsed=TRUE)
-rec_list <- xmlToList(all_recs)
-
-## ------------------------------------------------------------------------
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",use_history=TRUE)
 all_recs <- NULL
-for(seq_start in seq(1,ceiling(r_search$count/500)*500,500)){
-     all_recs <- c(all_recs,entrez_fetch(db="nuccore", web_history=r_search$web_history,rettype="gb",retmax=500,retstart=seq_start))
+for(seq_start in seq(1,ceiling(r_search$count/200)*200,200)){
+     all_recs <- c(all_recs,entrez_fetch(db="nuccore", web_history=r_search$web_history,rettype="gbc",retmode="xml",retmax=200,retstart=seq_start))
 }
+rec_list <- do.call(c,lapply(all_recs,xmlToList))
 
 ## ------------------------------------------------------------------------
 write(sapply(rec_list,function(X){paste(">",X$INSDSeq_locus,"\n",X$INSDSeq_sequence,sep="")}),"polerovirus_from_genbank.fasta")
@@ -89,7 +86,8 @@ for(usp in unique(info$species)){
   if(nrow(sub)>10){
     acc <- as.character(sub[,1])
     # the following code line prevent the code from crashing
-    # i.e. new sequences not available in the example may be uploaded when you will run the code
+    # i.e. new sequences not available in the example may be uploaded
+	# when you will run the code
     acc <- acc[!is.na(match(acc,colnames(d)))]
     h <- hclust(as.dist(d[acc,acc]))
     grp <- cutree(h,k=10)

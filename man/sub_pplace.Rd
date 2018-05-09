@@ -29,7 +29,9 @@ A vector of run_id to subset
 }
 }
 \details{
-Both the multiclass and the placement table are subseted. All the other compartiments of the list are left untouch.
+When using placement_id, the subset is performed based on the placement_id column of the multiclass, placements, placement_positions, placement_names, placement_classifications, placement_evidence, placement_median_identities and placement_nbc data frames.
+When using ech_id and ech_regexp, the subset is performed from the multiclass$name column.
+When using run_id, the subset is performed based on the placements$run_id column.
 }
 \value{
 A pplace object
@@ -43,12 +45,15 @@ data(pplace)
 
 ### subsetting using placement ids. Here placements 1 to 5
 sub1 <- sub_pplace(pplace,placement_id=1:5)
+sub1
 
 ### subsetting using sequenes ids
 id <- c("GWZHISEQ01:514:HMCLFBCXX:2:1108:1739:60356_90",
 "GWZHISEQ01:514:HMCLFBCXX:2:1114:13665:31277_80")
 sub2 <- sub_pplace(pplace,ech_id=id)
+sub2
 
 ### subsetting using a regular expression of sequence ids
 sub3 <- sub_pplace(pplace,ech_regexp="^HWI")
+sub3
 }

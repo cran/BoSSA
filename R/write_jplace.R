@@ -1,9 +1,13 @@
 
 write_jplace <- function(x,outfile){
+    if(class(x)!="pplace" & class(x)!="jplace"){
+      stop("ERROR: the input is not an object of class pplace or jplace")
+    }
+
     if(class(x)=="pplace"){
       if(nrow(x$run)>1){
 	x <- sub_pplace(x,run_id=x$run[1,1])
-	warning("Only the placements for first run were exported")
+	warning("Only the placements from the first run were exported")
       }
     }
     

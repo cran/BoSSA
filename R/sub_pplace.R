@@ -1,5 +1,9 @@
 sub_pplace <-
 function(x,placement_id=NULL,ech_id=NULL,ech_regexp=NULL,run_id=NULL){
+    if(class(x)!="pplace" & class(x)!="jplace"){
+      stop("ERROR: the input is not an object of class pplace or jplace")
+    }
+
   if(sum(!is.null(placement_id),!is.null(ech_id),!is.null(ech_regexp),!is.null(run_id))>1) stop("Subset can only be performed using a single criterion a time e.g. ech_id or run_id not both in the same call")
   if(class(x)=="jplace"){
     if(!is.null(placement_id)){

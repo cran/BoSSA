@@ -20,7 +20,7 @@ The path/name of a pdb file.
 The output is a list of objects	
   \item{header}{The header of the pdb file}
   \item{compound}{A data frame summarizing the CMPND part of the pdb file. This include the molecule ID, the molecule name and the chain ID}
-  \item{atom}{A data frame with the atom type, the amino acid, the amino acid number, the chain and the euclidian X, Y, Z cooridnates of the atom}
+  \item{atom}{A data frame with the atom type, the amino acid, the amino acid number, the chain and the euclidian X, Y, Z coordinates of the atoms}
   \item{sequence}{A list with the numbering of the amino acid and the amino acid sequence for each chain}
 }
 \references{

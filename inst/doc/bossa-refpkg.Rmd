@@ -22,15 +22,11 @@ Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
 
 # Summary
 
-Phylogenetic placements are sets of mapping of query sequences to a reference phylogenetic tree. Phylogenetic placement inference using [pplacer](http://matsen.fhcrc.org/pplacer/) requires the construction of "reference packages", *i.e.* informations on the phylogeny and taxonomy of a given group of organisms. This vignette presents example of reference package construction using [taxtastic](https://github.com/fhcrc/taxtastic), [rppr](http://matsen.github.io/pplacer/generated_rst/rppr.html) and R.
-
-# Important note
-
-The reference packages shiped with BoSSA are incomplete (they lack the alignment file) in order to reduce the package size. Whereas, the information available is sufficient to draw summary statistics, it won't be enough to perform actual phylogenetic placement.
+A phylogenetic placement corresponds to the position of a query sequence in a reference tree. Phylogenetic placement inference using [pplacer](http://matsen.fhcrc.org/pplacer/) requires the construction of "reference packages", *i.e.* informations on the phylogeny and taxonomy of a given group of organisms. This vignette presents example of reference package construction using [taxtastic](https://github.com/fhcrc/taxtastic), [rppr](http://matsen.github.io/pplacer/generated_rst/rppr.html) and R.
 
 # The polerovirus example
 
-Imagine you obtained some viral contigs that using BLAST (or some related similarity based search tools) were assigned to the *Polerovirus* genus. You want to obtain phylogenetic placements of these sequences using pplacer and now have to build a reference package for this genus.
+Imagine you obtained some viral contigs that were assigned to the *Polerovirus* genus using a BLAST search. You want to obtain phylogenetic placements of these sequences using pplacer and now have to build a reference package for this genus.
 
 A search on the [ICTV website](https://talk.ictvonline.org/ictv-reports/ictv_9th_report/positive-sense-rna-viruses-2011/w/posrna_viruses/265/luteoviridae) informs us that polerovirus belongs to the Luteovidiae family and that their "genome size is fairly uniform ranging from 5.6 kb to 6.0 kb".
 
@@ -68,10 +64,10 @@ r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refs
 r_search$count
 ```
 
-To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to 218.
+To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to r_search$count.
 
 ```{r }
-r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",retmax=500)
+r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",retmax=1000)
 gi <- r_search$ids
 gi[1:10]
 ```
@@ -80,27 +76,17 @@ gi[1:10]
 
 #### Get the genbank informations in XML format
 
-We now use these gi to download the information relative to the sequences in XML format. XML is a handy format as it allow to directly extract specific fields form the genbank file.
-
-```{r }
-all_recs <- entrez_fetch(db="nuccore", id=gi, rettype="gbc",retmode="xml",parsed=TRUE)
-rec_list <- xmlToList(all_recs)
-```
-
-#### For a large set of sequences
-
-Alternatively, when the number of sequence to recover is large (>500), you can use the use history option and fetch the sequence 500 by 500.
+We now use these gi to download the information relative to the sequences in XML format. XML is a handy format as it allow to directly extract specific fields form the genbank file. Because the number of sequence may be a bit large, we will use the history option in our rentrez query. Sequences will then be obtained by batch of 200.
 
 ```{r}
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",use_history=TRUE)
 all_recs <- NULL
-for(seq_start in seq(1,ceiling(r_search$count/500)*500,500)){
-     all_recs <- c(all_recs,entrez_fetch(db="nuccore", web_history=r_search$web_history,rettype="gb",retmax=500,retstart=seq_start))
+for(seq_start in seq(1,ceiling(r_search$count/200)*200,200)){
+     all_recs <- c(all_recs,entrez_fetch(db="nuccore", web_history=r_search$web_history,rettype="gbc",retmode="xml",retmax=200,retstart=seq_start))
 }
+rec_list <- do.call(c,lapply(all_recs,xmlToList))
 ```
 #### Extract the fasta from the XML
-
-We now extract the sequences and write a fasta formated file on the disk.
 
 ```{r }
 write(sapply(rec_list,function(X){paste(">",X$INSDSeq_locus,"\n",X$INSDSeq_sequence,sep="")}),"polerovirus_from_genbank.fasta")
@@ -116,7 +102,7 @@ source_name <- t(sapply(rec_list,function(X){c(X$INSDSeq_locus,X$INSDSeq_organis
 
 # Alignement and phylogeny
 
-Now we have the sequences on the disk we can align the fasta (here using MAFFT) and construct a phylogenetic tree (here using FastTree)...
+Now we have the sequences on the disk we can align the sequences (here using MAFFT) and construct a phylogenetic tree (here using FastTree)...
 
 ```
 mafft --adjustdirection --reorder polerovirus_from_genbank.fasta > polerovirus_from_genbank_MAFFT.fasta
@@ -132,7 +118,7 @@ plot(tree,cex=0.4,no.margin=TRUE)
 nodelabels(cex=0.8)
 ```
 
-Note that using the "adjustdirection" during alignment, MAFFT generates reverse complement sequences and align them together with the remaining sequences. The best orientation is conserved for each sequence. When the reverse complement is aligned, the program add the "_R_" prefix in the name of the sequence. In this case and in order to keep the correspondance between informations files and sequences names, you'll have to edit back sequences names.
+Note that using the "adjustdirection" during alignment, MAFFT generates reverse complement sequences and align them together with the remaining sequences. The best orientation is conserved for each sequence. When the reverse complement is aligned, the program add the "\_R\_" prefix in the name of the sequence. In this case and in order to keep the correspondance between informations files and sequences names, you'll have to edit the sequences names.
 
 After plotting the tree, and the node labels, it is apparent that the node 231 may be a good rooting point (may change depending on the sequence set you download *i.e.* as more poleroviruses sequences are upload to NCBI, the tree structure and node numbering will change).
 
@@ -151,7 +137,7 @@ write.tree(root_tree,"polerovirus_ROOTED.tre")
 
 ### Download the polerovirus taxonomy IDs
 
-We need to compile the complete taxonomy information for the polerovirus. Taxastic has a function for that. We first download the full taxonomy from NCBI using taxit and subset it for the poleroviruses.
+We need to obtain the complete taxonomy information for the polerovirus. Taxastic has a function for that. We first download the full taxonomy from NCBI using taxit and subset it for the poleroviruses tax ids.
 
 ```{r }
 tax_ids <-  entrez_link(dbfrom='nuccore', id=gi, db='taxonomy')
@@ -160,8 +146,8 @@ write(tax_ids,"taxonomy_polerovirus.id")
 ```
 
 ```
-taxit new_database -d taxonomy.db
-taxit taxtable -d taxonomy.db -t taxonomy_polerovirus.id -o polerovirus_taxonomy.csv
+taxit new_database --out taxonomy.db
+taxit taxtable -f taxonomy_polerovirus.id -o polerovirus_taxonomy.csv taxonomy.db
 ```
 
 ### The information file
@@ -209,7 +195,7 @@ refpkg_path <- paste(find.package("BoSSA"),"/extdata/polerovirus.refpkg",sep="")
 refpkg(refpkg_path)
 ```
 
-- A tree with tuips colored according to a taxonomic level, here the species
+- A tree with tips colored according to a taxonomic level, here the species
 
 ```{r tree1, fig.width=5, rank_tree="species",fig.height=5}
 refpkg(refpkg_path,type="tree",cex.text=0.3)
@@ -227,7 +213,7 @@ refpkg(refpkg_path,type="pie",rank_pie="species",cex.text=0.6)
 refpkg(refpkg_path,type="krona")
 ```
 
-A file (default is for_krona.txt) is generated and can be used to generate a krona chart with the command:
+A file (default is for_krona.txt) is generated and can be used to generate a krona chart with the ImportText.pl scrit from the [Krona software](https://github.com/marbl/Krona/wiki/KronaTools):
 
 ```
 ImportText.pl for_krona.txt
@@ -235,7 +221,7 @@ ImportText.pl for_krona.txt
 
 # Subsample the refpkg
 
-It could be interesting to reduce the size of the reference package. Whereas, there is still a decent number of sequences in this polerovirus dataset, this number could be way higher and represent a computationnal burden for the rest of the analysis. Here is some code example to subset each species to a maximum of 10 sequences.
+It could be interesting to reduce the size of the reference package. Whereas, there is still a decent number of sequences in this polerovirus dataset, this number could be way higher and represent a computationnal burden for the rest of the analysis. Here is some code example to subset each species to a maximum of 10 sequences. [T-Coffee](http://tcoffee.readthedocs.io/en/latest/tcoffee_main_documentation.html#extracting-removing-sequences-with-the-identity) could be usefull if you would like to subsample based on diversity.
 
 ```{r}
 d <- cophenetic.phylo(root_tree)
@@ -249,7 +235,8 @@ for(usp in unique(info$species)){
   if(nrow(sub)>10){
     acc <- as.character(sub[,1])
     # the following code line prevent the code from crashing
-    # i.e. new sequences not available in the example may be uploaded when you will run the code
+    # i.e. new sequences not available in the example may be uploaded
+	# when you will run the code
     acc <- acc[!is.na(match(acc,colnames(d)))]
     h <- hclust(as.dist(d[acc,acc]))
     grp <- cutree(h,k=10)
@@ -260,7 +247,7 @@ for(usp in unique(info$species)){
 to_remove <- root_tree$tip.label[!root_tree$tip.label%in%ids]
 ```
 
-Note that the highly recommanded practice is to subset the alignement, re-align and compute a new phylogenetic tree, one can also directly subset the already available phylogeny (in a "quick and dirty way").
+Note that the highly recommanded practice is to subset the alignement, re-align and compute a new phylogenetic tree, one can also directly subset the already available phylogeny (in a "quick and dirty" way).
 
 ```{r}
 root_tree2 <- drop.tip(root_tree,to_remove)
@@ -271,7 +258,7 @@ Using these new files, you can create another smaller refpkg using the "taxit cr
 
 # Citation
 
-If you find phyloseq and/or its tutorials useful, you may cite BoSSA:
+If you find BoSSA and/or its tutorials useful, you may cite:
 
 ```{r}
 citation("BoSSA")
