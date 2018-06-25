@@ -29,7 +29,7 @@ If set to TRUE, only plot the best position for each placement. default is FALSE
 An optionnal title to plot along the tree
 }
   \item{N}{
-An optionnal vector of the weight of each placement. Must be of the same length and order as placements in the multiclass table.
+An optionnal vector of the weight of each placement. Must be of the same length and order as placements in the multiclass table. Note that the placement mass (potentially) available from the original files are imported into R but aren't use in the analysis. The N parameter should be used instead.
 }
   \item{transfo}{
 An optionnal function to transform the placement size when type set to "precise". Beware that it is also applied to the legend so that it does not anymore correspond to the placement size but to the transform dot size

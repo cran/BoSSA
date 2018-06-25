@@ -20,7 +20,7 @@ A pplace object
 A vector or list specifying the association between placement (in the multiclass table) and sample. In the case of a list, multiple sample can be associated with a single placement.
 }
   \item{N}{
-An optionnal vector or list with a number of occurence associated to each placed sequence. If "sample_info" is a list, "N" must also be a list. 
+An optionnal vector or list with a number of occurence (or weight) associated to each placed sequence. If "sample_info" is a list, "N" must also be a list. Note that the placement mass (potentially) available from the original files are imported into R but aren't use in the analysis. The N parameter should be used instead.
 }
   \item{tax_name}{
 Either the tax ids (when set to FALSE, default) or the tax names (when set to TRUE) are used as column names. The tax names are obtained form the "taxo" table of the pplace object.

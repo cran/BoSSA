@@ -26,6 +26,7 @@ A phylogenetic placement corresponds to the position of a query sequence in a re
 
 # Important note
 
+- The placement mass (potentially) available in the jplace and sqlite files are imported in R (within the jplace and pplace objects) but aren't use in the analysis. You should use the "N" parameter (available in several fucntions for the package) to use different weight for each placement.
 - The reference packages shiped with BoSSA are incomplete (they lack the alignment file) in order to reduce the package size. Whereas, the information available is sufficient to draw summary statistics, it won't be enough to perform actual phylogenetic placement.
 - When the jplace or sqlite files are import into R, the node numbering available in the original file is converted to the class "phylo" numbering.
 

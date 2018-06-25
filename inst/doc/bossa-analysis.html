@@ -85,6 +85,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="important-note" class="section level1">
 <h1>Important note</h1>
 <ul>
+<li>The placement mass (potentially) available in the jplace and sqlite files are imported in R (within the jplace and pplace objects) but aren’t use in the analysis. You should use the “N” parameter (available in several fucntions for the package) to use different weight for each placement.</li>
 <li>The reference packages shiped with BoSSA are incomplete (they lack the alignment file) in order to reduce the package size. Whereas, the information available is sufficient to draw summary statistics, it won’t be enough to perform actual phylogenetic placement.</li>
 <li>When the jplace or sqlite files are import into R, the node numbering available in the original file is converted to the class “phylo” numbering.</li>
 </ul>
@@ -109,7 +110,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">refpkg</span>(refpkg_path)</code></pre></div>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/Rtmp4MInun/Rinst1ad145b0ee52/BoSSA/extdata/example.refpkg
+## Path:/tmp/Rtmpbwc4y6/Rinst44cef328f02/BoSSA/extdata/example.refpkg
 ## 
 ## Tree with 652 tips 650 nodes
 ## 
@@ -321,7 +322,7 @@ sub2</code></pre></div>
 ## run: 1
 ## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
 ## Placement on a phylogenetic tree with 652 tips and 650 internal nodes.
-## sequence nb: 89
+## sequence nb: 50
 ## placement nb: 20</code></pre>
 </div>
 <div id="conversion" class="section level1">
@@ -391,12 +392,12 @@ example_contingency</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">example_OTU &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">500</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">5</span>,<span class="dt">dimnames=</span><span class="kw">list</span>(pplace<span class="op">$</span>multiclass<span class="op">$</span>name,<span class="kw">paste</span>(<span class="st">&quot;sample&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dt">sep=</span><span class="st">&quot;_&quot;</span>)))
 <span class="kw">head</span>(example_OTU)</code></pre></div>
 <pre><code>##                sample_1 sample_2 sample_3 sample_4 sample_5
-## GLKT0ZE01A0Y5X       42       64       78       76       36
-## GLKT0ZE01A1B65       27       84       86       47       75
-## GLKT0ZE01A608I       59       39       30        3       81
-## GLKT0ZE01A6F1M       50       89        4       45       62
-## GLKT0ZE01AH4NR       97        2        6       51       72
-## GLKT0ZE01AHXIQ        8       24       18       39       76</code></pre>
+## GLKT0ZE01A0Y5X       84       90       34       34       38
+## GLKT0ZE01A1B65       73       79       84       28       40
+## GLKT0ZE01A608I       74       23      100       99       73
+## GLKT0ZE01A6F1M       48        2       90       36       69
+## GLKT0ZE01AH4NR       12       31        3       30       73
+## GLKT0ZE01AHXIQ        4       90       40       58       30</code></pre>
 <p>The exemple below is not run (commented) due to errors/warnings triggered by the used of Bioconductor packages (i.e. phyloseq) in CRAN vignette on some platform. Just uncomment the code if you like to have a try.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#library(phyloseq)</span>
 <span class="co">#example_phyloseq &lt;- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))</span>
@@ -411,7 +412,7 @@ example_contingency</code></pre></div>
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2018). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 3.3.
+##   Analysis. R package version 3.4.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -419,7 +420,7 @@ example_contingency</code></pre></div>
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2018},
-##     note = {R package version 3.3},
+##     note = {R package version 3.4},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from

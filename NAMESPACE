@@ -11,7 +11,8 @@ export("read_sqlite",
        "print.jplace",
        "print.protdb",
        "read_protdb",
-       "write_jplace"
+       "write_jplace",
+       "circular_tree"
        )
 import(ape)
 import(RSQLite)
@@ -20,7 +21,7 @@ import(plotrix)
 import(phangorn)
 importFrom("grDevices", "colorRamp", "rgb")
 importFrom("graphics", "axis", "image", "layout", "par", "plot",
-             "plot.new", "points", "text")
+             "plot.new", "points", "text", "lines")
 importFrom("stats", "aggregate")
 importFrom("grDevices", "rainbow")
 importFrom("grDevices", "col2rgb")

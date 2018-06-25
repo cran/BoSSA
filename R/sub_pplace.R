@@ -29,9 +29,13 @@ function(x,placement_id=NULL,ech_id=NULL,ech_regexp=NULL,run_id=NULL){
     }
     if(!is.null(ech_id)){
       pid <- unique(x$placement_names$placement_id[x$placement_names$name%in%ech_id])
+      x$multiclass <- x$multiclass[x$multiclass[,2]%in%ech_id,]
+      x$placement_names <- x$placement_names[x$placement_names[,2]%in%ech_id,]
     }
     if(!is.null(ech_regexp)){
       pid <- unique(x$placement_names$placement_id[grep(ech_regexp,x$placement_names$name)])
+      x$multiclass <- x$multiclass[grep(ech_regexp,x$multiclass$name),]
+      x$placement_names <- x$placement_names[grep(ech_regexp,x$placement_names[,2]),]
     }
     x$multiclass <- x$multiclass[x$multiclass[,1]%in%pid,]
     x$placement_positions <- x$placement_positions[x$placement_positions$placement_id%in%pid,]
