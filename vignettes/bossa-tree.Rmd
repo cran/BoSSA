@@ -2,10 +2,10 @@
 title: "Circular tree plot"
 output:
   prettydoc::html_pretty:
-    theme: cayman
+    theme: architect
     highlight: github
 vignette: >
-  %\VignetteIndexEntry{Reference package construction from scratch}
+  %\VignetteIndexEntry{Inside out circular tree plot}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---

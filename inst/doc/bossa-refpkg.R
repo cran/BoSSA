@@ -2,9 +2,11 @@
 
 ## ------------------------------------------------------------------------
 library("rentrez")
+library("httr")
 library("XML")
 library("ape")
 library("BoSSA")
+set_config(config(http_version = 0))
 
 ## ------------------------------------------------------------------------
 r_search <- entrez_search(db="taxonomy", term="polerovirus")
@@ -50,8 +52,8 @@ plot(root_tree,cex=0.4,no.margin=TRUE)
 write.tree(root_tree,"polerovirus_ROOTED.tre")
 
 ## ------------------------------------------------------------------------
-tax_ids <-  entrez_link(dbfrom='nuccore', id=gi, db='taxonomy')
-tax_ids <- tax_ids$links$nuccore_taxonomy
+r_search <- entrez_search(db="taxonomy", term="txid119164[orgn]",retmax=1000)
+tax_ids <-  r_search$ids
 write(tax_ids,"taxonomy_polerovirus.id")
 
 ## ------------------------------------------------------------------------
@@ -65,8 +67,8 @@ refpkg_path <- paste(find.package("BoSSA"),"/extdata/polerovirus.refpkg",sep="")
 
 refpkg(refpkg_path)
 
-## ----tree1, fig.width=5, rank_tree="species",fig.height=5----------------
-refpkg(refpkg_path,type="tree",cex.text=0.3)
+## ----tree1, fig.width=5, fig.height=5------------------------------------
+refpkg(refpkg_path,type="tree",cex.text=0.3,rank_tree="species")
 
 ## ----pie1, fig.width=5, fig.height=5-------------------------------------
 refpkg(refpkg_path,type="pie",rank_pie="species",cex.text=0.6)

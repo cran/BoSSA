@@ -24,7 +24,7 @@ function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE
     br_sum <- aggregate(placement_N[match(x$placement_positions$placement_id,placement_N[,1]),2]*x$placement_positions$ml_ratio,list(branch=x$placement_positions$location),sum)
 
     if(type=="number"){
-      plot(x$arbre,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE)
+      plot(x$arbre,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE,...)
       text(0,0,main,cex=cex.text,pos=4)
       edgelabels(round(br_sum[,2]),br_sum[,1],cex=cex.number)
       if(asb) add.scale.bar()
@@ -33,7 +33,7 @@ function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE
     if(type=="fattree"){
       vwidth <- rep(0.1,nrow(x$arbre$edge))
       vwidth[br_sum[,1]] <- ceiling(max_width*br_sum[,2]/max(br_sum[,2]))
-      plot(x$arbre,edge.width=vwidth,show.tip.label=stl,no.margin=TRUE)
+      plot(x$arbre,edge.width=vwidth,show.tip.label=stl,no.margin=TRUE,...)
       text(0,0,main,cex=cex.text,pos=4)
       if(asb) add.scale.bar()
     }
@@ -45,13 +45,13 @@ function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE
       coln[coln>100] <- 100
       vcol[br_sum[,1]] <- col_palette[coln]
       if(!legend){
-	    plot(x$arbre,edge.color=vcol,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE)
+	    plot(x$arbre,edge.color=vcol,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE,...)
 	    text(0,0,main,cex=cex.text,pos=4)
 	    if(asb) add.scale.bar()
       }
       if(legend){
 	   layout(matrix(c(rep(1,6),2),ncol=1))
-       plot(x$arbre,edge.color=vcol,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE)
+       plot(x$arbre,edge.color=vcol,edge.width=edge.width,show.tip.label=stl,no.margin=TRUE,...)
 	   text(0,0,main,cex=cex.text,pos=4)
 	   if(asb) add.scale.bar()
 	   par(mar=c(3,15,3,15))
@@ -96,7 +96,7 @@ function(x,type="precise",simplify=FALSE,main="",N=NULL,transfo=NULL,legend=TRUE
     }
 
     if(!add){
-      plot(x$arbre,edge.color="black",edge.width=edge.width,show.tip.label=stl,no.margin=TRUE)
+      plot(x$arbre,edge.color="black",edge.width=edge.width,show.tip.label=stl,no.margin=TRUE,...)
       text(0,0,main,cex=cex.text,pos=4)
     }
     if(asb) add.scale.bar()

@@ -2,16 +2,13 @@
 title: "Reference package construction from scratch"
 output:
   prettydoc::html_pretty:
-    theme: cayman
+    theme: architect
     highlight: github
 vignette: >
   %\VignetteIndexEntry{Reference package construction from scratch}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  
 ---
-<!--
-%% \VignetteEngine{knitr::knitr}
--->
 
 ```{r style, echo = FALSE, results = 'asis'}
 ```
@@ -36,9 +33,11 @@ We will use the [rentrez package](https://cran.r-project.org/package=rentrez) to
 
 ```{r }
 library("rentrez")
+library("httr")
 library("XML")
 library("ape")
 library("BoSSA")
+set_config(config(http_version = 0))
 ```
 
 ### How many polerovirus sequences are available on NCBI ?
@@ -140,14 +139,14 @@ write.tree(root_tree,"polerovirus_ROOTED.tre")
 We need to obtain the complete taxonomy information for the polerovirus. Taxastic has a function for that. We first download the full taxonomy from NCBI using taxit and subset it for the poleroviruses tax ids.
 
 ```{r }
-tax_ids <-  entrez_link(dbfrom='nuccore', id=gi, db='taxonomy')
-tax_ids <- tax_ids$links$nuccore_taxonomy
+r_search <- entrez_search(db="taxonomy", term="txid119164[orgn]",retmax=1000)
+tax_ids <-  r_search$ids
 write(tax_ids,"taxonomy_polerovirus.id")
 ```
 
 ```
-taxit new_database --out taxonomy.db
-taxit taxtable -f taxonomy_polerovirus.id -o polerovirus_taxonomy.csv taxonomy.db
+taxit new_database
+taxit taxtable -f taxonomy_polerovirus.id -o polerovirus_taxonomy.csv ncbi_taxonomy.db
 ```
 
 ### The information file
@@ -197,8 +196,8 @@ refpkg(refpkg_path)
 
 - A tree with tips colored according to a taxonomic level, here the species
 
-```{r tree1, fig.width=5, rank_tree="species",fig.height=5}
-refpkg(refpkg_path,type="tree",cex.text=0.3)
+```{r tree1, fig.width=5, fig.height=5}
+refpkg(refpkg_path,type="tree",cex.text=0.3,rank_tree="species")
 ```
 
 - A pie chart summarizing the taxonomy with here again, the species level. Note there is a slight decay between the text labels and slices...

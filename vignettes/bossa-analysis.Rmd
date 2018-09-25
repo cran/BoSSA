@@ -2,7 +2,7 @@
 title: "Example of placement analysis using BoSSA"
 output:
   prettydoc::html_pretty:
-    theme: cayman
+    theme: architect
     highlight: github
 vignette: >
   %\VignetteIndexEntry{Example of placement analysis using BoSSA}
@@ -22,7 +22,7 @@ Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
 
 # Summary
 
-A phylogenetic placement corresponds to the position of a query sequence in a reference tree. Different tools exits to infer phylogenetic placements, such as [pplacer](http://matsen.fhcrc.org/pplacer/), [EPA](http://sco.h-its.org/exelixis/web/software/epa/index.html) or [RAPPAS](https://gite.lirmm.fr/linard/RAPPAS). Importantly, these three programs produce placements under a common [file format](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009). Placements can later be analysed using the [guppy](https://matsen.github.io/pplacer/generated_rst/guppy.html) software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide examples of placements analyses using BoSSA.
+A phylogenetic placement corresponds to the position of a query sequence in a reference tree. Different tools exits to infer phylogenetic placements, such as [pplacer](http://matsen.fhcrc.org/pplacer/), [EPA](http://sco.h-its.org/exelixis/web/software/epa/index.html) or [RAPPAS](https://github.com/benclaff/RAPPAS). Importantly, these three programs produce placements under a common [file format](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009). Placements can later be analysed using the [guppy](https://matsen.github.io/pplacer/generated_rst/guppy.html) software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide examples of placements analyses using BoSSA.
 
 # Important note
 
