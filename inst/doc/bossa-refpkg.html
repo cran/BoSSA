@@ -106,17 +106,17 @@ r_search<span class="op">$</span>ids</code></pre></div>
 <p>… and use this id (119164) to query the nucleotide database. Note that we remove the reference sequence set from the search (using “NOT srcdb_refseq[PROP]”) as these are duplicates from records already available in the nucleotide database.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_search &lt;-<span class="st"> </span><span class="kw">entrez_search</span>(<span class="dt">db=</span><span class="st">&quot;nucleotide&quot;</span>, <span class="dt">term=</span><span class="st">&quot;txid119164[orgn] NOT srcdb_refseq[PROP]&quot;</span>)
 r_search<span class="op">$</span>count</code></pre></div>
-<pre><code>## [1] 2209</code></pre>
+<pre><code>## [1] 2240</code></pre>
 <p>This number represents the total number of sequences from the genus polerovirus. We will now search for full genomes using the “AND 5000:6500[slen]” query.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_search &lt;-<span class="st"> </span><span class="kw">entrez_search</span>(<span class="dt">db=</span><span class="st">&quot;nucleotide&quot;</span>, <span class="dt">term=</span><span class="st">&quot;txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]&quot;</span>)
 r_search<span class="op">$</span>count</code></pre></div>
-<pre><code>## [1] 264</code></pre>
+<pre><code>## [1] 286</code></pre>
 <p>To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to r_search$count.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_search &lt;-<span class="st"> </span><span class="kw">entrez_search</span>(<span class="dt">db=</span><span class="st">&quot;nucleotide&quot;</span>, <span class="dt">term=</span><span class="st">&quot;txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]&quot;</span>,<span class="dt">retmax=</span><span class="dv">1000</span>)
 gi &lt;-<span class="st"> </span>r_search<span class="op">$</span>ids
 gi[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</code></pre></div>
-<pre><code>##  [1] &quot;1477204309&quot; &quot;1474720823&quot; &quot;1474720816&quot; &quot;1474720809&quot; &quot;1474720802&quot;
-##  [6] &quot;1474720795&quot; &quot;1469268045&quot; &quot;1469268038&quot; &quot;1464440239&quot; &quot;1219731495&quot;</code></pre>
+<pre><code>##  [1] &quot;1500137766&quot; &quot;1500137758&quot; &quot;1500137750&quot; &quot;1500137742&quot; &quot;1500137734&quot;
+##  [6] &quot;1500137726&quot; &quot;1500137718&quot; &quot;1500137710&quot; &quot;1500137702&quot; &quot;1500137694&quot;</code></pre>
 </div>
 <div id="download-all-these-sequences" class="section level3">
 <h3>Download all these sequences</h3>
@@ -206,7 +206,7 @@ rppr info -c polerovirus.refpk</code></pre>
 <span class="kw">refpkg</span>(refpkg_path)</code></pre></div>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/RtmpJnkeoT/Rinst5e1a60b27351/BoSSA/extdata/polerovirus.refpkg
+## Path:/tmp/RtmpCAQwva/Rinst28417549124/BoSSA/extdata/polerovirus.refpkg
 ## 
 ## Tree with 204 tips 203 nodes
 ## 
@@ -244,17 +244,20 @@ rppr info -c polerovirus.refpk</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">cophenetic.phylo</span>(root_tree)
 
 ids &lt;-<span class="st"> </span><span class="ot">NULL</span>
-<span class="cf">for</span>(usp <span class="cf">in</span> <span class="kw">unique</span>(info<span class="op">$</span>species)){
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(<span class="kw">unique</span>(info<span class="op">$</span>species))){
+    usp &lt;-<span class="st"> </span><span class="kw">unique</span>(info<span class="op">$</span>species)[i]
   sub &lt;-<span class="st"> </span>info[<span class="kw">as.character</span>(info<span class="op">$</span>species)<span class="op">==</span>usp,]
-  <span class="cf">if</span>(<span class="kw">nrow</span>(sub)<span class="op">&lt;=</span><span class="dv">10</span>){
-    ids &lt;-<span class="st"> </span><span class="kw">c</span>(ids,<span class="kw">as.character</span>(sub[,<span class="dv">1</span>]))
+  acc &lt;-<span class="st"> </span><span class="kw">as.character</span>(sub[,<span class="dv">1</span>])
+  
+  <span class="co"># the following code line prevent the code from crashing</span>
+  <span class="co"># i.e. new sequences not available in the example may be uploaded</span>
+  <span class="co"># when you will run the code</span>
+  acc &lt;-<span class="st"> </span>acc[<span class="op">!</span><span class="kw">is.na</span>(<span class="kw">match</span>(acc,<span class="kw">colnames</span>(d)))]
+
+  <span class="cf">if</span>(<span class="kw">length</span>(acc)<span class="op">&lt;=</span><span class="dv">10</span>){
+    ids &lt;-<span class="st"> </span><span class="kw">c</span>(ids,acc)
   }
-  <span class="cf">if</span>(<span class="kw">nrow</span>(sub)<span class="op">&gt;</span><span class="dv">10</span>){
-    acc &lt;-<span class="st"> </span><span class="kw">as.character</span>(sub[,<span class="dv">1</span>])
-    <span class="co"># the following code line prevent the code from crashing</span>
-    <span class="co"># i.e. new sequences not available in the example may be uploaded</span>
-    <span class="co"># when you will run the code</span>
-    acc &lt;-<span class="st"> </span>acc[<span class="op">!</span><span class="kw">is.na</span>(<span class="kw">match</span>(acc,<span class="kw">colnames</span>(d)))]
+  <span class="cf">if</span>(<span class="kw">length</span>(acc)<span class="op">&gt;</span><span class="dv">10</span>){
     h &lt;-<span class="st"> </span><span class="kw">hclust</span>(<span class="kw">as.dist</span>(d[acc,acc]))
     grp &lt;-<span class="st"> </span><span class="kw">cutree</span>(h,<span class="dt">k=</span><span class="dv">10</span>)
     ids &lt;-<span class="st"> </span><span class="kw">c</span>(ids,<span class="kw">names</span>(grp)[<span class="kw">match</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>,grp)])
@@ -275,7 +278,7 @@ to_remove &lt;-<span class="st"> </span>root_tree<span class="op">$</span>tip.la
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2018). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 3.5.
+##   Analysis. R package version 3.6.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -283,7 +286,7 @@ to_remove &lt;-<span class="st"> </span>root_tree<span class="op">$</span>tip.la
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2018},
-##     note = {R package version 3.5},
+##     note = {R package version 3.6},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from

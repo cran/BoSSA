@@ -1,4 +1,4 @@
-ea9a1e261f2cd0347aa1d84a61982061 *DESCRIPTION
+5ca9c30eea192289837ed8f7be46100d *DESCRIPTION
 ec755a9fafc147453a4f2d3e517635d3 *NAMESPACE
 ee87fe0c8fc1e6aa3097124d6db2aa22 *R/circular_tree.r
 dc408bbd88bba72bc48353d809ad950f *R/get_edge.R
@@ -15,18 +15,18 @@ e660a73fe3f40257c2d774f7bcd0f481 *R/read_pdb.R
 bf59da7bba1cecbc1341adb40365fe65 *R/refpkg.R
 e2a2e7052971f0ae4d5be8bfab8e1002 *R/sub_pplace.R
 7b9f455cbee1e2ff80c9b6be0464eafe *R/write_jplace.R
-cbdccf75821d25c7cac1baa6fd49587d *build/partial.rdb
+c720d7ded07e5e0a0b3e515bc07c654d *build/partial.rdb
 9b40d006439ad352c18ebf17485adc84 *build/vignette.rds
 2940c854a6973292cec6d59ef862d9d6 *data/pplace.rda
 4188053f9cbfdaf9ebdea0a15c060e04 *inst/doc/bossa-analysis.R
 77757258937c864bb4d027d2e4fb7d2f *inst/doc/bossa-analysis.Rmd
-7c7f5ac754f7008f260ee64b63fd72ba *inst/doc/bossa-analysis.html
-845310638d8fad80bba6d8a0d001877e *inst/doc/bossa-refpkg.R
-3c86a9797fbc877cc432a16c95be30f4 *inst/doc/bossa-refpkg.Rmd
-8a6c0f8b85fa00921dd06c6346c829b8 *inst/doc/bossa-refpkg.html
+07b289671b874d932c37babdcf400a3a *inst/doc/bossa-analysis.html
+45c85d295e469e5c7416d9ba5b04ce12 *inst/doc/bossa-refpkg.R
+29461714fbe60e9899926da010c6e0e8 *inst/doc/bossa-refpkg.Rmd
+571d1aa4baf6376a602f8c75f35a6f01 *inst/doc/bossa-refpkg.html
 def473f552bb393f9dfbbe0d375703b0 *inst/doc/bossa-tree.R
 d3a462c1f7b2b1e4e0ea9f46613f84e5 *inst/doc/bossa-tree.Rmd
-ebc0915795bc3444cf8b93bb7222e8ce *inst/doc/bossa-tree.html
+63021baddceb0af31824b5602dc9dcd1 *inst/doc/bossa-tree.html
 1ad3ba7f636ee9637863934852e73f0f *inst/extdata/1L2M.pdb
 51434ae00a391e0dd09491e905a84b5a *inst/extdata/example.jplace
 27ec70f7f4cd9769ad0beb627b933073 *inst/extdata/example.refpkg/CONTENTS.json
@@ -56,5 +56,5 @@ d5514332e34783456b048015b848f6bf *man/refpkg.Rd
 6d1661feb06a82e71780926b9f9659f2 *man/sub_pplace.Rd
 897e52053c3ed3a036357faa1bc717ce *man/write_jplace.Rd
 77757258937c864bb4d027d2e4fb7d2f *vignettes/bossa-analysis.Rmd
-3c86a9797fbc877cc432a16c95be30f4 *vignettes/bossa-refpkg.Rmd
+29461714fbe60e9899926da010c6e0e8 *vignettes/bossa-refpkg.Rmd
 d3a462c1f7b2b1e4e0ea9f46613f84e5 *vignettes/bossa-tree.Rmd

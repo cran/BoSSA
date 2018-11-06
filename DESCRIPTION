@@ -1,8 +1,8 @@
 Package: BoSSA
 Type: Package
 Title: A Bunch of Structure and Sequence Analysis
-Version: 3.5
-Date: 2018-08-27
+Version: 3.6
+Date: 2018-11-06
 Author: Pierre Lefeuvre
 Maintainer: Pierre Lefeuvre <pierre.lefeuvre@cirad.fr>
 Depends: R (>= 3.3.0)
@@ -12,6 +12,6 @@ VignetteBuilder: knitr
 Description: Reads and plots phylogenetic placements.
 License: GPL
 NeedsCompilation: no
-Packaged: 2018-09-25 18:16:52 UTC; lefeuvre
+Packaged: 2018-11-06 19:25:30 UTC; lefeuvre
 Repository: CRAN
-Date/Publication: 2018-09-25 19:10:02 UTC
+Date/Publication: 2018-11-06 19:50:03 UTC

@@ -114,7 +114,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">refpkg</span>(refpkg_path)</code></pre></div>
 <pre><code>## ### Reference package summary
 ## 
-## Path:/tmp/RtmpJnkeoT/Rinst5e1a60b27351/BoSSA/extdata/example.refpkg
+## Path:/tmp/RtmpCAQwva/Rinst28417549124/BoSSA/extdata/example.refpkg
 ## 
 ## Tree with 652 tips 650 nodes
 ## 
@@ -327,7 +327,7 @@ sub2</code></pre></div>
 ## call run 1: /home/lefeuvre/prgrm_phylo/pplacer/pplacer-Linux-v1.1.alpha18-2-gcb55169/guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
 ## Placement on a phylogenetic tree with 652 tips and 650 internal nodes.
 ## sequence nb: 50
-## placement nb: 21</code></pre>
+## placement nb: 18</code></pre>
 </div>
 <div id="conversion" class="section level1">
 <h1>Conversion</h1>
@@ -396,12 +396,12 @@ example_contingency</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">example_OTU &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">500</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), <span class="dt">nrow =</span> <span class="dv">100</span>, <span class="dt">ncol =</span> <span class="dv">5</span>,<span class="dt">dimnames=</span><span class="kw">list</span>(pplace<span class="op">$</span>multiclass<span class="op">$</span>name,<span class="kw">paste</span>(<span class="st">&quot;sample&quot;</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>,<span class="dt">sep=</span><span class="st">&quot;_&quot;</span>)))
 <span class="kw">head</span>(example_OTU)</code></pre></div>
 <pre><code>##                sample_1 sample_2 sample_3 sample_4 sample_5
-## GLKT0ZE01A0Y5X       34       66        5       66       63
-## GLKT0ZE01A1B65       62       31       22       64       87
-## GLKT0ZE01A608I       81       42       99       81      100
-## GLKT0ZE01A6F1M       96       83       30       36       61
-## GLKT0ZE01AH4NR       53       98       20       29       52
-## GLKT0ZE01AHXIQ       45       54       70       27       86</code></pre>
+## GLKT0ZE01A0Y5X       91       18       74       86        7
+## GLKT0ZE01A1B65       16       25       58       67       42
+## GLKT0ZE01A608I       35       15       25       64       51
+## GLKT0ZE01A6F1M       62       83       68       62       19
+## GLKT0ZE01AH4NR       20       34        4       75       82
+## GLKT0ZE01AHXIQ       55       62        2       66       19</code></pre>
 <p>The exemple below is not run (commented) due to errors/warnings triggered by the used of Bioconductor packages (i.e. phyloseq) in CRAN vignette on some platform. Just uncomment the code if you like to have a try.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co">#library(phyloseq)</span>
 <span class="co">#example_phyloseq &lt;- phyloseq(otu_table(example_OTU,taxa_are_rows=TRUE),tax_table(example_taxo))</span>
@@ -416,7 +416,7 @@ example_contingency</code></pre></div>
 ## To cite package 'BoSSA' in publications use:
 ## 
 ##   Pierre Lefeuvre (2018). BoSSA: A Bunch of Structure and Sequence
-##   Analysis. R package version 3.5.
+##   Analysis. R package version 3.6.
 ## 
 ## A BibTeX entry for LaTeX users is
 ## 
@@ -424,7 +424,7 @@ example_contingency</code></pre></div>
 ##     title = {BoSSA: A Bunch of Structure and Sequence Analysis},
 ##     author = {Pierre Lefeuvre},
 ##     year = {2018},
-##     note = {R package version 3.5},
+##     note = {R package version 3.6},
 ##   }
 ## 
 ## ATTENTION: This citation information has been auto-generated from
