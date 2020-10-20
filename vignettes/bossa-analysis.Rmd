@@ -22,7 +22,7 @@ Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
 
 # Summary
 
-A phylogenetic placement corresponds to the position of a query sequence in a reference tree. Different tools exits to infer phylogenetic placements, such as [pplacer](http://matsen.fhcrc.org/pplacer/), [EPA](http://sco.h-its.org/exelixis/web/software/epa/index.html) or [RAPPAS](https://github.com/benclaff/RAPPAS). Importantly, these three programs produce placements under a common [file format](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009). Placements can later be analysed using the [guppy](https://matsen.github.io/pplacer/generated_rst/guppy.html) software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide examples of placements analyses using BoSSA.
+A phylogenetic placement corresponds to the position of a query sequence in a reference tree. Different tools exits to infer phylogenetic placements, such as [pplacer](https://matsen.fhcrc.org/pplacer/), [EPA](http://sco.h-its.org/exelixis/web/software/epa/index.html) or [RAPPAS](https://github.com/phylo42/RAPPAS). Importantly, these three programs produce placements under a common [file format](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009). Placements can later be analysed using the [guppy](https://matsen.github.io/pplacer/generated_rst/guppy.html) software from the pplacer suite to obtain statistically based taxonomic classification of sequences. The BoSSA package implements functions to reads, plots and summarizes phylogentic placements. This vignette is intended to provide examples of placements analyses using BoSSA.
 
 # Important note
 
@@ -32,13 +32,13 @@ A phylogenetic placement corresponds to the position of a query sequence in a re
 
 # How to obtain phylogentic placement file suitable for analysis with BoSSA ?
 
-The process to obtain placement files is dependent of the program you use. Assuming you are using pplacer, the process would be (1) build a reference package that contains an align set of reference sequences and a reference phylogenetic tree, (2) align query sequences to the reference alignment, (3) use pplacer to infer placements (jplace file output, format describe [here](http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009)) and optionally (4) infer the classification of each sequences using guppy (sqlite file output).
+The process to obtain placement files is dependent of the program you use. Assuming you are using pplacer, the process would be (1) build a reference package that contains an align set of reference sequences and a reference phylogenetic tree, (2) align query sequences to the reference alignment, (3) use pplacer to infer placements (jplace file output, format describe [here](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0031009)) and optionally (4) infer the classification of each sequences using guppy (sqlite file output).
 
 - The construction of the reference package could be a bit tricky. The [taxtastic](https://github.com/fhcrc/taxtastic) tool is extremely helpfull to this end. A tutorial can be find [here](http://fhcrc.github.io/taxtastic/quickstart.html). A BoSSA vignette on refpkg construction is also available.
-- [HMMER](http://hmmer.org/) and [MAFFT](http://mafft.cbrc.jp/alignment/software/addsequences.html) can be use to align sequences to a reference alignment.
+- [HMMER](http://hmmer.org/) and [MAFFT](https://mafft.cbrc.jp/alignment/software/addsequences.html) can be use to align sequences to a reference alignment.
 - For phylogenetic placement, a detailed tutorial is available [here](http://fhcrc.github.io/microbiome-demo/).
 
-Let's say you have obtained a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). The example files presented here are derived from other [reference packages and jplaces files](github.com/fhcrc/microbiome-demo/zipball/master) from the [Matsen group pplacer tutorials](http://fhcrc.github.io/microbiome-demo/). The sqlite file was obtained using the following command:
+Let's say you have obtained a reference package (refpkg), a placement file (jplace file) and a guppy classification output (sqlite file). The example files presented here are derived from other [reference packages and jplaces files](https://github.com/fhcrc/microbiome-demo/zipball/master) from the [Matsen group pplacer tutorials](https://fhcrc.github.io/microbiome-demo/). The sqlite file was obtained using the following command:
 
 ```
 guppy classify --multiclass-min 0 --cutoff 0.5 -c example.refpkg --sqlite example.sqlite example.jplace
@@ -223,7 +223,7 @@ citation("BoSSA")
 # Other resources
 
 ### On phylogenetic placements
-[pplacer website](http://matsen.fhcrc.org/pplacer/) and [documentation](http://matsen.github.io/pplacer/)
+[pplacer website](https://matsen.fhcrc.org/pplacer/) and [documentation](http://matsen.github.io/pplacer/)
 
 [taxtastic](https://github.com/fhcrc/taxtastic)
 

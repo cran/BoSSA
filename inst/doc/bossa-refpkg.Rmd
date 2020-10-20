@@ -17,9 +17,13 @@ Please report comments or bugs to Pierre Lefeuvre - <pierre.lefeuvre@cirad.fr>
 
 [BoSSA CRAN page](https://cran.r-project.org/package=BoSSA)
 
+# Important notice
+
+Note that most of the R code included in the vignette is not executed during vignette build. Some of the rentrez (very good) package code triggers HTTP failure during the CRAN check and is thus not evaluated during the build. It should run smoothly on you desktop computer.
+
 # Summary
 
-A phylogenetic placement corresponds to the position of a query sequence in a reference tree. Phylogenetic placement inference using [pplacer](http://matsen.fhcrc.org/pplacer/) requires the construction of "reference packages", *i.e.* informations on the phylogeny and taxonomy of a given group of organisms. This vignette presents example of reference package construction using [taxtastic](https://github.com/fhcrc/taxtastic), [rppr](http://matsen.github.io/pplacer/generated_rst/rppr.html) and R.
+A phylogenetic placement corresponds to the position of a query sequence in a reference tree. Phylogenetic placement inference using [pplacer](https://matsen.fhcrc.org/pplacer/) requires the construction of "reference packages", *i.e.* informations on the phylogeny and taxonomy of a given group of organisms. This vignette presents example of reference package construction using [taxtastic](https://github.com/fhcrc/taxtastic), [rppr](http://matsen.github.io/pplacer/generated_rst/rppr.html) and R.
 
 # The polerovirus example
 
@@ -29,7 +33,7 @@ A search on the [ICTV website](https://talk.ictvonline.org/ictv-reports/ictv_9th
 
 ### Loading the required packages
 
-We will use the [rentrez package](https://cran.r-project.org/package=rentrez) to query NCBI from R. Along with a vignette available at the [rentrez CRAN webpage](https://cran.r-project.org/package=rentrez), examples of rentrez use are available [here](https://ropensci.org/tutorials/rentrez_tutorial.html).
+We will use the [rentrez package](https://cran.r-project.org/package=rentrez) to query NCBI from R. Along with a vignette available at the [rentrez CRAN webpage](https://cran.r-project.org/package=rentrez), examples of rentrez use are available [here](https://docs.ropensci.org/rentrez/).
 
 ```{r }
 library("rentrez")
@@ -44,28 +48,28 @@ set_config(config(http_version = 0))
 
 We first search for the taxonomic id associated to the *Polerovirus* genus in NCBI...
 
-```{r }
+```{r, eval=F}
 r_search <- entrez_search(db="taxonomy", term="polerovirus")
 r_search$ids
 ```
 
-... and use this id (119164) to query the nucleotide database. Note that we remove the reference sequence set from the search (using "NOT srcdb_refseq[PROP]") as these are duplicates from records already available in the nucleotide database.
+... and use this taxonomic id (i.e. 119164) to query the nucleotide database. Note that we remove the reference sequence set from the search (using "NOT srcdb_refseq[PROP]") as these are duplicates from records already available in the nucleotide database.
 
-```{r }
+```{r, eval=F}
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP]")
 r_search$count
 ```
 
 This number represents the total number of sequences from the genus polerovirus. We will now search for full genomes using the "AND 5000:6500[slen]" query.
 
-```{r }
+```{r, eval=F}
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]")
 r_search$count
 ```
 
 To recover all the GenBank identifiers (gi), we have to increase the retmax parameter (default is 20) to something superior to r_search$count.
 
-```{r }
+```{r, eval=F}
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",retmax=1000)
 gi <- r_search$ids
 gi[1:10]
@@ -77,7 +81,7 @@ gi[1:10]
 
 We now use these gi to download the information relative to the sequences in XML format. XML is a handy format as it allow to directly extract specific fields form the genbank file. Because the number of sequence may be a bit large, we will use the history option in our rentrez query. Sequences will then be obtained by batch of 200.
 
-```{r}
+```{r, eval=F}
 r_search <- entrez_search(db="nucleotide", term="txid119164[orgn] NOT srcdb_refseq[PROP] AND 5000:6500[slen]",use_history=TRUE)
 all_recs <- NULL
 for(seq_start in seq(1,ceiling(r_search$count/200)*200,200)){
@@ -87,7 +91,7 @@ rec_list <- do.call(c,lapply(all_recs,xmlToList))
 ```
 #### Extract the fasta from the XML
 
-```{r }
+```{r, eval=F}
 write(sapply(rec_list,function(X){paste(">",X$INSDSeq_locus,"\n",X$INSDSeq_sequence,sep="")}),"polerovirus_from_genbank.fasta")
 ```
 
@@ -95,7 +99,7 @@ write(sapply(rec_list,function(X){paste(">",X$INSDSeq_locus,"\n",X$INSDSeq_seque
 
 Also, we need to extract the polerovirus classification of each sequence.
 
-```{r }
+```{r, eval=F}
 source_name <- t(sapply(rec_list,function(X){c(X$INSDSeq_locus,X$INSDSeq_organism)}))
 ```
 
@@ -104,6 +108,8 @@ source_name <- t(sapply(rec_list,function(X){c(X$INSDSeq_locus,X$INSDSeq_organis
 Now we have the sequences on the disk we can align the sequences (here using MAFFT) and construct a phylogenetic tree (here using FastTree)...
 
 ```
+### in bash
+
 mafft --adjustdirection --reorder polerovirus_from_genbank.fasta > polerovirus_from_genbank_MAFFT.fasta
 
 FastTree -nt -gamma -gtr -log polerovirus_from_genbank_MAFFT.log polerovirus_from_genbank_MAFFT.fasta > polerovirus_from_genbank_MAFFT.tre
@@ -138,14 +144,17 @@ write.tree(root_tree,"polerovirus_ROOTED.tre")
 
 We need to obtain the complete taxonomy information for the polerovirus. Taxastic has a function for that. We first download the full taxonomy from NCBI using taxit and subset it for the poleroviruses tax ids.
 
-```{r }
+```{r, eval=F}
 r_search <- entrez_search(db="taxonomy", term="txid119164[orgn]",retmax=1000)
 tax_ids <-  r_search$ids
 write(tax_ids,"taxonomy_polerovirus.id")
 ```
 
 ```
+### in bash
+
 taxit new_database
+
 taxit taxtable -f taxonomy_polerovirus.id -o polerovirus_taxonomy.csv ncbi_taxonomy.db
 ```
 
@@ -153,7 +162,7 @@ taxit taxtable -f taxonomy_polerovirus.id -o polerovirus_taxonomy.csv ncbi_taxon
 
 We can now create and write the information file for the sequences from our phylogenetic tree.
 
-```{r}
+```{r, eval=F}
 taxo <- read.csv(paste(find.package("BoSSA"),"/extdata/polerovirus_taxonomy.csv",sep=""))
 tax_id <- taxo$tax_id[match(source_name[,2],taxo$tax_name)]
 info <- data.frame(seqname=source_name[,1],accession=source_name[,1],tax_id=tax_id,species=source_name[,2],is_type=rep("no",nrow(source_name)))
@@ -165,6 +174,8 @@ write.table(info,"polerovirus_info.csv",sep=",",row.names=FALSE)
 The reference package is created using the taxit create command.
 
 ```
+### in bash
+
 taxit create -l polerovirus -P polerovirus.refpkg \
    	--taxonomy polerovirus_taxonomy.csv \
     --aln-fasta polerovirus_from_genbank_MAFFT.fasta \
@@ -178,7 +189,10 @@ taxit create -l polerovirus -P polerovirus.refpkg \
 Rppr offers the possibility to check the reference package using the following commands.
 
 ```
+### in bash
+
 rppr check -c polerovirus.refpkg
+
 rppr info -c polerovirus.refpk
 ```
 
@@ -222,7 +236,7 @@ ImportText.pl for_krona.txt
 
 It could be interesting to reduce the size of the reference package. Whereas, there is still a decent number of sequences in this polerovirus dataset, this number could be way higher and represent a computationnal burden for the rest of the analysis. Here is some code example to subset each species to a maximum of 10 sequences. [T-Coffee](http://tcoffee.readthedocs.io/en/latest/tcoffee_main_documentation.html#extracting-removing-sequences-with-the-identity) could be usefull if you would like to subsample based on diversity.
 
-```{r}
+```{r, eval=F}
 d <- cophenetic.phylo(root_tree)
 
 ids <- NULL
@@ -251,7 +265,7 @@ to_remove <- root_tree$tip.label[!root_tree$tip.label%in%ids]
 
 Note that the highly recommanded practice is to subset the alignement, re-align and compute a new phylogenetic tree, one can also directly subset the already available phylogeny (in a "quick and dirty" way).
 
-```{r}
+```{r, eval=F}
 root_tree2 <- drop.tip(root_tree,to_remove)
 write.tree(root_tree2,"polerovirus_ROOTED_SUBSAMPLED.tre")
 ```
@@ -269,7 +283,7 @@ citation("BoSSA")
 # Other resources
 
 ### On phylogenetic placements
-[pplacer website](http://matsen.fhcrc.org/pplacer/) and [documentation](http://matsen.github.io/pplacer/)
+[pplacer website](https://matsen.fhcrc.org/pplacer/) and [documentation](http://matsen.github.io/pplacer/)
 
 [taxtastic](https://github.com/fhcrc/taxtastic)
 

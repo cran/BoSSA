@@ -27,7 +27,8 @@ pierre lefeuvre
 \examples{
 
 data(pplace)
-
+\dontrun{
 write_jplace(pplace,"test.jplace")
+}
 
 }

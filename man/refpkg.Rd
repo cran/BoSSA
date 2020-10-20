@@ -91,6 +91,7 @@ refpkg(refpkg_path,type="pie",rank_pie=c("class","order","family"),cex.text=0.6)
 # it will produce a flat text file
 # this file can be use as input for the the "ImportText.pl" krona script
 # see https://github.com/marbl/Krona/wiki/KronaTools for more details on krona
+\dontrun{
 refpkg(refpkg_path,type="krona",out_krona="for_krona.txt")
-
+}
 }
